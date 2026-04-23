@@ -63,6 +63,11 @@
                                             Reports
                                         </a>
 
+                                        <a href="{{ route('projects.tasks.bugs.index', [$project, $task]) }}"
+                                           class="text-red-600 hover:underline text-sm">
+                                            Bugs
+                                        </a>
+
                                         <a href="{{ route('projects.tasks.edit', [$project, $task]) }}"
                                            class="text-blue-600 hover:underline text-sm">
                                             Edit

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BugController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
@@ -46,9 +47,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/projects/{project}/tasks/{task}/reports/create', [TaskReportController::class, 'create'])->name('projects.tasks.reports.create');
     Route::post('/projects/{project}/tasks/{task}/reports', [TaskReportController::class, 'store'])->name('projects.tasks.reports.store');
     Route::get('/projects/{project}/tasks/{task}/reports/export', [TaskReportController::class, 'export'])->name('projects.tasks.reports.export');
+
     Route::get('/projects/{project}/tasks/{task}/reports/{report}/revisions', [TaskReportRevisionController::class, 'index'])->name('projects.tasks.reports.revisions.index');
     Route::get('/projects/{project}/tasks/{task}/reports/{report}/revisions/create', [TaskReportRevisionController::class, 'create'])->name('projects.tasks.reports.revisions.create');
     Route::post('/projects/{project}/tasks/{task}/reports/{report}/revisions', [TaskReportRevisionController::class, 'store'])->name('projects.tasks.reports.revisions.store');
+
+    Route::get('/projects/{project}/tasks/{task}/bugs', [BugController::class, 'index'])->name('projects.tasks.bugs.index');
+    Route::get('/projects/{project}/tasks/{task}/bugs/create', [BugController::class, 'create'])->name('projects.tasks.bugs.create');
+    Route::post('/projects/{project}/tasks/{task}/bugs', [BugController::class, 'store'])->name('projects.tasks.bugs.store');
 });
 
 require __DIR__ . '/auth.php';

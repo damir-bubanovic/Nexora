@@ -26,7 +26,7 @@
                 @foreach($revisions as $revision)
                     <div class="bg-white shadow-sm rounded-lg p-6 border">
                         <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-semibold text-lg">Revision #{{ $revision->revision_number }}</h3>
+                            <h3 class="font-semibold text-lg">Revision # {{ $revision->revision_number }}</h3>
                             <x-status-badge :status="$revision->status" />
                         </div>
 
