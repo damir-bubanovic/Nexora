@@ -42,4 +42,11 @@ class TaskReportController extends Controller
             ->route('projects.tasks.reports.index', [$project, $task])
             ->with('success', 'Task report created successfully.');
     }
+
+    public function export(Project $project, Task $task): View
+    {
+        $reports = $task->reports()->latest()->get();
+
+        return view('task-reports.export', compact('project', 'task', 'reports'));
+    }
 }

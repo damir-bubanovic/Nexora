@@ -44,6 +44,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/projects/{project}/tasks/{task}/reports', [TaskReportController::class, 'index'])->name('projects.tasks.reports.index');
     Route::get('/projects/{project}/tasks/{task}/reports/create', [TaskReportController::class, 'create'])->name('projects.tasks.reports.create');
     Route::post('/projects/{project}/tasks/{task}/reports', [TaskReportController::class, 'store'])->name('projects.tasks.reports.store');
+    Route::get('/projects/{project}/tasks/{task}/reports/export', [TaskReportController::class, 'export'])->name('projects.tasks.reports.export');
 });
 
 require __DIR__ . '/auth.php';

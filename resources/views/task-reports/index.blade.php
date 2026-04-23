@@ -5,10 +5,17 @@
                 Reports for {{ $task->title }}
             </h2>
 
-            <a href="{{ route('projects.tasks.reports.create', [$project, $task]) }}"
-               class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">
-                New Report
-            </a>
+            <div class="flex items-center gap-3">
+                <a href="{{ route('projects.tasks.reports.export', [$project, $task]) }}"
+                   class="bg-gray-800 text-white px-4 py-2 rounded text-sm hover:bg-gray-700">
+                    Export
+                </a>
+
+                <a href="{{ route('projects.tasks.reports.create', [$project, $task]) }}"
+                   class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">
+                    New Report
+                </a>
+            </div>
         </div>
     </x-slot>
 
