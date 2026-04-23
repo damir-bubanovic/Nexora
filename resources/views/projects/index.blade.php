@@ -23,6 +23,27 @@
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
+
+                    <!-- FILTER -->
+                    <form method="GET" action="{{ route('projects.index') }}" class="mb-4 flex gap-3 items-center">
+                        <select name="status" class="border-gray-300 rounded shadow-sm">
+                            <option value="">All Status</option>
+                            <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
+                            <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="completed" {{ request('status') === 'completed' ? 'selected' : '' }}>Completed</option>
+                        </select>
+
+                        <button type="submit"
+                            class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 text-sm">
+                            Filter
+                        </button>
+
+                        <a href="{{ route('projects.index') }}"
+                            class="text-sm text-gray-600 hover:underline">
+                            Reset
+                        </a>
+                    </form>
+
                     @if ($projects->isEmpty())
                         <p class="text-gray-600">No projects found.</p>
                     @else
@@ -68,6 +89,7 @@
                             </table>
                         </div>
                     @endif
+
                 </div>
             </div>
         </div>

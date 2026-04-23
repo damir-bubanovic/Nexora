@@ -4,14 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
+
 
 class ProjectController extends Controller
 {
     public function index(): View
     {
-        $projects = Project::latest()->get();
+        $query = Project::query();
+
+        if (request('status')) {
+            $query->where('status', request('status'));
+        }
+
+        $projects = $query->latest()->get();
 
         return view('projects.index', compact('projects'));
     }
@@ -21,17 +29,10 @@ class ProjectController extends Controller
         return view('projects.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreProjectRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'status' => ['required', 'string', 'max:50'],
-            'start_date' => ['nullable', 'date'],
-            'end_date' => ['nullable', 'date'],
-        ]);
-
-        $validated['created_by'] = auth()->id();
+        $validated = $request->validated();
+        $validated['created_by'] = $request->user()->id;
 
         Project::create($validated);
 
@@ -45,15 +46,9 @@ class ProjectController extends Controller
         return view('projects.edit', compact('project'));
     }
 
-    public function update(Request $request, Project $project): RedirectResponse
+    public function update(UpdateProjectRequest $request, Project $project): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'status' => ['required', 'string', 'max:50'],
-            'start_date' => ['nullable', 'date'],
-            'end_date' => ['nullable', 'date'],
-        ]);
+        $validated = $request->validated();
 
         $project->update($validated);
 
