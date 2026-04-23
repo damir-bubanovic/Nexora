@@ -27,6 +27,13 @@
                     <x-nav-link :href="route('projects.create')" :active="request()->routeIs('projects.create')">
                         {{ __('Create Project') }}
                     </x-nav-link>
+                    @auth
+                        @if(auth()->user()->isAdmin())
+                            <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
+                                {{ __('Users') }}
+                            </x-nav-link>
+                        @endif
+                    @endauth
                 </div>
             </div>
 
@@ -94,6 +101,13 @@
             <x-responsive-nav-link :href="route('projects.create')" :active="request()->routeIs('projects.create')">
                 {{ __('Create Project') }}
             </x-responsive-nav-link>
+            @auth
+                @if(auth()->user()->isAdmin())
+                    <x-responsive-nav-link :href="route('users.index')">
+                        {{ __('Users') }}
+                    </x-responsive-nav-link>
+                @endif
+            @endauth
         </div>
 
         <!-- Responsive Settings Options -->

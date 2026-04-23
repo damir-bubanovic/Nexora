@@ -6,6 +6,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskReportController;
 use App\Http\Controllers\TaskReportRevisionController;
+use App\Http\Controllers\UserController;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\TaskReport;
@@ -36,6 +37,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('projects', ProjectController::class);
+
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.updateRole');
     Route::get('/my-tasks', [TaskController::class, 'myTasks'])->name('tasks.my');
 
     Route::get('/projects/{project}/tasks', [TaskController::class, 'index'])->name('projects.tasks.index');
