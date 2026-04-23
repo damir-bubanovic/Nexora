@@ -69,11 +69,33 @@
                                     @foreach ($projects as $project)
                                         <tr>
                                             <td class="px-4 py-2 border">{{ $project->name }}</td>
-                                            <td class="px-4 py-2 border">{{ $project->status }}</td>
+                                            <td class="px-4 py-2 border">
+                                                @if ($project->status === 'active')
+                                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                                        Active
+                                                    </span>
+                                                @elseif ($project->status === 'pending')
+                                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                                        Pending
+                                                    </span>
+                                                @elseif ($project->status === 'completed')
+                                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                                        Completed
+                                                    </span>
+                                                @else
+                                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
+                                                        {{ ucfirst($project->status) }}
+                                                    </span>
+                                                @endif
+                                            </td>
                                             <td class="px-4 py-2 border">{{ $project->start_date }}</td>
                                             <td class="px-4 py-2 border">{{ $project->end_date }}</td>
                                             <td class="px-4 py-2 border">
                                                 <div class="flex items-center gap-3">
+                                                    <a href="{{ route('projects.show', $project) }}"
+                                                       class="text-gray-700 hover:underline text-sm">
+                                                        View
+                                                    </a>
                                                     <a href="{{ route('projects.edit', $project) }}"
                                                        class="text-blue-600 hover:underline text-sm">
                                                         Edit

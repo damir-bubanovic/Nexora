@@ -31,6 +31,11 @@ class ProjectController extends Controller
         return view('projects.index', compact('projects'));
     }
 
+    public function show(Project $project): View
+    {
+        return view('projects.show', compact('project'));
+    }
+
     public function create(): View
     {
         return view('projects.create');
