@@ -27,7 +27,7 @@
                     <p class="text-sm text-gray-600 mb-4">
                         Create and manage project workflows.
                     </p>
-                    <a href="#" class="text-blue-600 hover:underline text-sm">
+                    <a href="{{ route('projects.index') }}" class="text-blue-600 hover:underline text-sm">
                         View Projects →
                     </a>
                 </div>
