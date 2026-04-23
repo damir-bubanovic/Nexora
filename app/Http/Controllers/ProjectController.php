@@ -88,6 +88,10 @@ class ProjectController extends Controller
 
     public function destroy(Project $project): RedirectResponse
     {
+        if (! Auth::user()->isAdmin()) {
+            abort(403, 'Unauthorized');
+        }
+
         $projectName = $project->name;
         $projectId = $project->id;
 

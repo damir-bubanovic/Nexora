@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Project;
 use App\Models\Task;
-use App\Models\User;
 use App\Models\TaskReport;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -13,41 +13,51 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $damir = User::factory()->create([
+        // Create admin user
+        $damir = User::create([
             'name' => 'Damir',
             'email' => 'damir@gmail.com',
             'password' => Hash::make('password123'),
+            'role' => 'admin',
         ]);
 
-        $otherUsers = User::factory()->count(4)->create();
+        // Create other users (developers)
+        $otherUsers = User::factory()->count(4)->create([
+            'password' => Hash::make('password123'),
+            'role' => 'developer',
+        ]);
 
+        // Combine users
         $users = $otherUsers->prepend($damir);
 
+        // Create projects
         Project::factory()
             ->count(30)
             ->make()
             ->each(function ($project) use ($users) {
+
                 $owner = $users->random();
 
                 $project->created_by = $owner->id;
                 $project->save();
 
+                // Create tasks
                 Task::factory()
                     ->count(rand(1, 10))
-                    ->make()
-                    ->each(function ($task) use ($project, $owner) {
-                        $task->project_id = $project->id;
-                        $task->created_by = $owner->id;
-                        $task->save();
+                    ->create([
+                        'project_id' => $project->id,
+                        'created_by' => $owner->id,
+                        'assigned_to' => $users->random()->id,
+                    ])
+                    ->each(function ($task) use ($owner) {
 
+                        // Create reports
                         TaskReport::factory()
                             ->count(rand(1, 3))
-                            ->make()
-                            ->each(function ($report) use ($task, $owner) {
-                                $report->task_id = $task->id;
-                                $report->created_by = $owner->id;
-                                $report->save();
-                            });
+                            ->create([
+                                'task_id' => $task->id,
+                                'created_by' => $owner->id,
+                            ]);
                     });
             });
     }
