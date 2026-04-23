@@ -24,9 +24,16 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
 
-                    <!-- FILTER -->
-                    <form method="GET" action="{{ route('projects.index') }}" class="mb-4 flex gap-3 items-center">
-                        <select name="status" class="border-gray-300 rounded shadow-sm">
+                    <form method="GET" action="{{ route('projects.index') }}" class="mb-4 flex flex-col md:flex-row gap-3 md:items-center">
+                        <input
+                            type="text"
+                            name="search"
+                            value="{{ request('search') }}"
+                            placeholder="Search by project name"
+                            class="border-gray-300 rounded shadow-sm w-full md:w-64"
+                        >
+
+                        <select name="status" class="border-gray-300 rounded shadow-sm w-full md:w-48">
                             <option value="">All Status</option>
                             <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
                             <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
@@ -35,7 +42,7 @@
 
                         <button type="submit"
                             class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 text-sm">
-                            Filter
+                            Apply
                         </button>
 
                         <a href="{{ route('projects.index') }}"
@@ -87,6 +94,10 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                        </div>
+
+                        <div class="mt-4">
+                            {{ $projects->links() }}
                         </div>
                     @endif
 

@@ -19,7 +19,14 @@ class ProjectController extends Controller
             $query->where('status', request('status'));
         }
 
-        $projects = $query->latest()->get();
+        if (request('search')) {
+            $query->where('name', 'like', '%' . request('search') . '%');
+        }
+
+        $projects = $query
+            ->latest()
+            ->paginate(5)
+            ->withQueryString();
 
         return view('projects.index', compact('projects'));
     }
