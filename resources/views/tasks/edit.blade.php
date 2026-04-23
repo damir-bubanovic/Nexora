@@ -8,22 +8,48 @@
             @csrf
             @method('PUT')
 
-            <input name="title" value="{{ old('title', $task->title) }}" class="w-full border rounded p-2" required>
+            <input
+                name="title"
+                value="{{ old('title', $task->title) }}"
+                class="w-full border rounded p-2"
+                required
+            >
 
-            <textarea name="description" class="w-full border rounded p-2">
-{{ old('description', $task->description) }}</textarea>
+            <textarea
+                name="description"
+                class="w-full border rounded p-2"
+            >{{ old('description', $task->description) }}</textarea>
 
             <select name="status" class="w-full border rounded p-2">
-                <option value="pending" {{ $task->status === 'pending' ? 'selected' : '' }}>Pending</option>
-                <option value="active" {{ $task->status === 'active' ? 'selected' : '' }}>Active</option>
-                <option value="completed" {{ $task->status === 'completed' ? 'selected' : '' }}>Completed</option>
+                <option value="pending" {{ old('status', $task->status) === 'pending' ? 'selected' : '' }}>Pending</option>
+                <option value="active" {{ old('status', $task->status) === 'active' ? 'selected' : '' }}>Active</option>
+                <option value="completed" {{ old('status', $task->status) === 'completed' ? 'selected' : '' }}>Completed</option>
             </select>
 
-            <input type="number" name="priority" value="{{ old('priority', $task->priority) }}" class="w-full border rounded p-2">
+            <select name="assigned_to" class="w-full border rounded p-2">
+                <option value="">Unassigned</option>
+                @foreach($users as $user)
+                    <option value="{{ $user->id }}" {{ old('assigned_to', $task->assigned_to) == $user->id ? 'selected' : '' }}>
+                        {{ $user->name }}
+                    </option>
+                @endforeach
+            </select>
 
-            <input type="date" name="due_date" value="{{ old('due_date', $task->due_date) }}" class="w-full border rounded p-2">
+            <input
+                type="number"
+                name="priority"
+                value="{{ old('priority', $task->priority) }}"
+                class="w-full border rounded p-2"
+            >
 
-            <button class="bg-blue-600 text-white px-4 py-2 rounded">
+            <input
+                type="date"
+                name="due_date"
+                value="{{ old('due_date', $task->due_date) }}"
+                class="w-full border rounded p-2"
+            >
+
+            <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                 Update Task
             </button>
         </form>

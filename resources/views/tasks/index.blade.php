@@ -28,6 +28,7 @@
                         <tr>
                             <th class="border px-3 py-2 text-left">Title</th>
                             <th class="border px-3 py-2 text-left">Status</th>
+                            <th class="border px-3 py-2 text-left">Assigned</th>
                             <th class="border px-3 py-2 text-left">Priority</th>
                             <th class="border px-3 py-2 text-left">Due</th>
                             <th class="border px-3 py-2 text-left">Actions</th>
@@ -40,6 +41,10 @@
 
                                 <td class="border px-3 py-2">
                                     <x-status-badge :status="$task->status" />
+                                </td>
+
+                                <td class="border px-3 py-2">
+                                    {{ $task->assignee?->name ?? '—' }}
                                 </td>
 
                                 <td class="border px-3 py-2">

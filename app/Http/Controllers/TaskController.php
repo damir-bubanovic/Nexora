@@ -7,6 +7,8 @@ use App\Models\Task;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use App\Models\User;
+
 
 class TaskController extends Controller
 {
@@ -19,7 +21,9 @@ class TaskController extends Controller
 
     public function create(Project $project): View
     {
-        return view('tasks.create', compact('project'));
+        $users = User::all();
+
+        return view('tasks.create', compact('project', 'users'));
     }
 
     public function store(Request $request, Project $project): RedirectResponse
@@ -30,6 +34,7 @@ class TaskController extends Controller
             'status' => ['required', 'string'],
             'priority' => ['required', 'integer'],
             'due_date' => ['nullable', 'date'],
+            'assigned_to' => ['nullable', 'exists:users,id'],
         ]);
 
         $validated['project_id'] = $project->id;
@@ -45,7 +50,9 @@ class TaskController extends Controller
 
     public function edit(Project $project, Task $task): View
     {
-        return view('tasks.edit', compact('project', 'task'));
+        $users = User::all();
+
+        return view('tasks.edit', compact('project', 'task', 'users'));
     }
 
     public function update(Request $request, Project $project, Task $task): RedirectResponse
@@ -56,6 +63,7 @@ class TaskController extends Controller
             'status' => ['required', 'string'],
             'priority' => ['required', 'integer'],
             'due_date' => ['nullable', 'date'],
+            'assigned_to' => ['nullable', 'exists:users,id'],
         ]);
 
         $task->update($validated);
