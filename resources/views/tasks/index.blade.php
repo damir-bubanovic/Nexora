@@ -42,7 +42,9 @@
                                     <x-status-badge :status="$task->status" />
                                 </td>
 
-                                <td class="border px-3 py-2">{{ $task->priority }}</td>
+                                <td class="border px-3 py-2">
+                                    {{ $task->priority }}
+                                </td>
 
                                 <td class="border px-3 py-2">
                                     {{ $task->due_date ?: '—' }}
@@ -50,6 +52,12 @@
 
                                 <td class="border px-3 py-2">
                                     <div class="flex items-center gap-3">
+
+                                        <a href="{{ route('projects.tasks.reports.index', [$project, $task]) }}"
+                                           class="text-gray-700 hover:underline text-sm">
+                                            Reports
+                                        </a>
+
                                         <a href="{{ route('projects.tasks.edit', [$project, $task]) }}"
                                            class="text-blue-600 hover:underline text-sm">
                                             Edit
@@ -64,6 +72,7 @@
                                                 Delete
                                             </button>
                                         </form>
+
                                     </div>
                                 </td>
 
