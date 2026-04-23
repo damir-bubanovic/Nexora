@@ -82,5 +82,14 @@ class TaskController extends Controller
             ->with('success', 'Task deleted successfully.');
     }
 
+    public function myTasks(): View
+    {
+        $tasks = \App\Models\Task::where('assigned_to', auth()->id())
+            ->latest()
+            ->get();
+
+        return view('tasks.my', compact('tasks'));
+    }
+
 
 }
