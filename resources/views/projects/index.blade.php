@@ -83,17 +83,18 @@
                                                     <a href="{{ route('projects.edit', $project) }}"
                                                        class="text-blue-600 hover:underline text-sm">
                                                         Edit
-                                                    </a>
-
-                                                    <form method="POST" action="{{ route('projects.destroy', $project) }}"
-                                                          onsubmit="return confirm('Are you sure you want to delete this project?');">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit"
-                                                                class="text-red-600 hover:underline text-sm">
-                                                            Delete
-                                                        </button>
-                                                    </form>
+                                                    </a>                                                   
+                                                    @auth
+                                                        @if(auth()->user()->isAdmin())
+                                                            <form method="POST" action="{{ route('projects.destroy', $project) }}">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button class="text-red-600 hover:underline text-sm">
+                                                                    Delete
+                                                                </button>
+                                                            </form>
+                                                        @endif
+                                                    @endauth
                                                 </div>
                                             </td>
                                         </tr>
