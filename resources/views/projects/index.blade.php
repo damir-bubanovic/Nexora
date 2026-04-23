@@ -34,6 +34,7 @@
                                         <th class="px-4 py-2 border text-left">Status</th>
                                         <th class="px-4 py-2 border text-left">Start Date</th>
                                         <th class="px-4 py-2 border text-left">End Date</th>
+                                        <th class="px-4 py-2 border text-left">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -43,6 +44,24 @@
                                             <td class="px-4 py-2 border">{{ $project->status }}</td>
                                             <td class="px-4 py-2 border">{{ $project->start_date }}</td>
                                             <td class="px-4 py-2 border">{{ $project->end_date }}</td>
+                                            <td class="px-4 py-2 border">
+                                                <div class="flex items-center gap-3">
+                                                    <a href="{{ route('projects.edit', $project) }}"
+                                                       class="text-blue-600 hover:underline text-sm">
+                                                        Edit
+                                                    </a>
+
+                                                    <form method="POST" action="{{ route('projects.destroy', $project) }}"
+                                                          onsubmit="return confirm('Are you sure you want to delete this project?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                                class="text-red-600 hover:underline text-sm">
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
