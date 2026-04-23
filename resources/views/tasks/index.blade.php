@@ -6,7 +6,7 @@
             </h2>
 
             <a href="{{ route('projects.tasks.create', $project) }}"
-               class="bg-blue-600 text-white px-4 py-2 rounded text-sm">
+               class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">
                 New Task
             </a>
         </div>
@@ -14,32 +14,64 @@
 
     <div class="p-6">
         @if(session('success'))
-            <div class="mb-4 text-green-700">{{ session('success') }}</div>
+            <div class="mb-4 bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded">
+                {{ session('success') }}
+            </div>
         @endif
 
         @if($tasks->isEmpty())
-            <p>No tasks yet.</p>
+            <p class="text-gray-600">No tasks yet.</p>
         @else
-            <table class="min-w-full border">
-                <thead>
-                    <tr>
-                        <th class="border px-3 py-2">Title</th>
-                        <th class="border px-3 py-2">Status</th>
-                        <th class="border px-3 py-2">Priority</th>
-                        <th class="border px-3 py-2">Due</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($tasks as $task)
+            <div class="overflow-x-auto">
+                <table class="min-w-full border border-gray-200">
+                    <thead class="bg-gray-100">
                         <tr>
-                            <td class="border px-3 py-2">{{ $task->title }}</td>
-                            <td class="border px-3 py-2">{{ $task->status }}</td>
-                            <td class="border px-3 py-2">{{ $task->priority }}</td>
-                            <td class="border px-3 py-2">{{ $task->due_date }}</td>
+                            <th class="border px-3 py-2 text-left">Title</th>
+                            <th class="border px-3 py-2 text-left">Status</th>
+                            <th class="border px-3 py-2 text-left">Priority</th>
+                            <th class="border px-3 py-2 text-left">Due</th>
+                            <th class="border px-3 py-2 text-left">Actions</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach($tasks as $task)
+                            <tr>
+                                <td class="border px-3 py-2">{{ $task->title }}</td>
+
+                                <td class="border px-3 py-2">
+                                    <x-status-badge :status="$task->status" />
+                                </td>
+
+                                <td class="border px-3 py-2">{{ $task->priority }}</td>
+
+                                <td class="border px-3 py-2">
+                                    {{ $task->due_date ?: '—' }}
+                                </td>
+
+                                <td class="border px-3 py-2">
+                                    <div class="flex items-center gap-3">
+                                        <a href="{{ route('projects.tasks.edit', [$project, $task]) }}"
+                                           class="text-blue-600 hover:underline text-sm">
+                                            Edit
+                                        </a>
+
+                                        <form method="POST"
+                                              action="{{ route('projects.tasks.destroy', [$project, $task]) }}"
+                                              onsubmit="return confirm('Delete this task?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="text-red-600 hover:underline text-sm">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         @endif
     </div>
 </x-app-layout>

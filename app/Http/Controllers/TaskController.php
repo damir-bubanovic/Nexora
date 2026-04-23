@@ -41,4 +41,38 @@ class TaskController extends Controller
             ->route('projects.tasks.index', $project)
             ->with('success', 'Task created successfully.');
     }
+
+
+    public function edit(Project $project, Task $task): View
+    {
+        return view('tasks.edit', compact('project', 'task'));
+    }
+
+    public function update(Request $request, Project $project, Task $task): RedirectResponse
+    {
+        $validated = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'status' => ['required', 'string'],
+            'priority' => ['required', 'integer'],
+            'due_date' => ['nullable', 'date'],
+        ]);
+
+        $task->update($validated);
+
+        return redirect()
+            ->route('projects.tasks.index', $project)
+            ->with('success', 'Task updated successfully.');
+    }
+
+    public function destroy(Project $project, Task $task): RedirectResponse
+    {
+        $task->delete();
+
+        return redirect()
+            ->route('projects.tasks.index', $project)
+            ->with('success', 'Task deleted successfully.');
+    }
+
+
 }
