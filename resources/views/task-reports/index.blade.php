@@ -32,7 +32,14 @@
             <div class="space-y-4">
                 @foreach($reports as $report)
                     <div class="bg-white shadow-sm rounded-lg p-6 border">
-                        <h3 class="font-semibold text-lg mb-3">Report #{{ $report->id }}</h3>
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-semibold text-lg">Report #{{ $report->id }}</h3>
+
+                            <a href="{{ route('projects.tasks.reports.revisions.index', [$project, $task, $report]) }}"
+                               class="text-blue-600 hover:underline text-sm">
+                                Revisions
+                            </a>
+                        </div>
 
                         <div class="space-y-3 text-sm text-gray-700">
                             <div>

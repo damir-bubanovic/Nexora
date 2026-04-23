@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskReportController;
+use App\Http\Controllers\TaskReportRevisionController;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\TaskReport;
@@ -45,6 +46,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/projects/{project}/tasks/{task}/reports/create', [TaskReportController::class, 'create'])->name('projects.tasks.reports.create');
     Route::post('/projects/{project}/tasks/{task}/reports', [TaskReportController::class, 'store'])->name('projects.tasks.reports.store');
     Route::get('/projects/{project}/tasks/{task}/reports/export', [TaskReportController::class, 'export'])->name('projects.tasks.reports.export');
+    Route::get('/projects/{project}/tasks/{task}/reports/{report}/revisions', [TaskReportRevisionController::class, 'index'])->name('projects.tasks.reports.revisions.index');
+    Route::get('/projects/{project}/tasks/{task}/reports/{report}/revisions/create', [TaskReportRevisionController::class, 'create'])->name('projects.tasks.reports.revisions.create');
+    Route::post('/projects/{project}/tasks/{task}/reports/{report}/revisions', [TaskReportRevisionController::class, 'store'])->name('projects.tasks.reports.revisions.store');
 });
 
 require __DIR__ . '/auth.php';
