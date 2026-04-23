@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Project;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
-
+use App\Models\ActivityLog;
+use App\Models\Project;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class ProjectController extends Controller
 {
@@ -44,9 +45,17 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        $validated['created_by'] = $request->user()->id;
+        $validated['created_by'] = $request->user()->getAuthIdentifier();
 
-        Project::create($validated);
+        $project = Project::create($validated);
+
+        ActivityLog::create([
+            'user_id' => $request->user()->getAuthIdentifier(),
+            'action' => 'create',
+            'subject_type' => 'project',
+            'subject_id' => $project->id,
+            'description' => 'Created project: ' . $project->name,
+        ]);
 
         return redirect()
             ->route('projects.index')
@@ -64,6 +73,14 @@ class ProjectController extends Controller
 
         $project->update($validated);
 
+        ActivityLog::create([
+            'user_id' => $request->user()->getAuthIdentifier(),
+            'action' => 'update',
+            'subject_type' => 'project',
+            'subject_id' => $project->id,
+            'description' => 'Updated project: ' . $project->name,
+        ]);
+
         return redirect()
             ->route('projects.index')
             ->with('success', 'Project updated successfully.');
@@ -71,7 +88,18 @@ class ProjectController extends Controller
 
     public function destroy(Project $project): RedirectResponse
     {
+        $projectName = $project->name;
+        $projectId = $project->id;
+
         $project->delete();
+
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'action' => 'delete',
+            'subject_type' => 'project',
+            'subject_id' => $projectId,
+            'description' => 'Deleted project: ' . $projectName,
+        ]);
 
         return redirect()
             ->route('projects.index')

@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use App\Models\ActivityLog;
+
 
 class BugController extends Controller
 {
@@ -38,7 +40,15 @@ class BugController extends Controller
         $validated['task_id'] = $task->id;
         $validated['created_by'] = $request->user()->id;
 
-        Bug::create($validated);
+        $bug = Bug::create($validated);
+
+        ActivityLog::create([
+            'user_id' => $request->user()->id,
+            'action' => 'create',
+            'subject_type' => 'bug',
+            'subject_id' => $bug->id,
+            'description' => 'Reported bug: ' . $bug->title,
+        ]);
 
         return redirect()
             ->route('projects.tasks.bugs.index', [$project, $task])

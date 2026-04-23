@@ -11,6 +11,7 @@ use App\Models\Task;
 use App\Models\TaskReport;
 use Illuminate\Support\Facades\Route;
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -24,6 +25,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'pendingTasks' => Task::where('status', 'pending')->count(),
             'completedTasks' => Task::where('status', 'completed')->count(),
             'totalReports' => TaskReport::count(),
+            'recentActivities' => \App\Models\ActivityLog::latest()->take(10)->get(),
         ]);
     })->name('dashboard');
 });

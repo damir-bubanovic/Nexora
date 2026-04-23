@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Project;
 use App\Models\Task;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
 use App\Models\User;
-
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class TaskController extends Controller
 {
@@ -38,15 +39,22 @@ class TaskController extends Controller
         ]);
 
         $validated['project_id'] = $project->id;
-        $validated['created_by'] = $request->user()->id;
+        $validated['created_by'] = $request->user()->getAuthIdentifier();
 
-        Task::create($validated);
+        $task = Task::create($validated);
+
+        ActivityLog::create([
+            'user_id' => $request->user()->getAuthIdentifier(),
+            'action' => 'create',
+            'subject_type' => 'task',
+            'subject_id' => $task->id,
+            'description' => 'Created task: ' . $task->title,
+        ]);
 
         return redirect()
             ->route('projects.tasks.index', $project)
             ->with('success', 'Task created successfully.');
     }
-
 
     public function edit(Project $project, Task $task): View
     {
@@ -68,6 +76,14 @@ class TaskController extends Controller
 
         $task->update($validated);
 
+        ActivityLog::create([
+            'user_id' => $request->user()->getAuthIdentifier(),
+            'action' => 'update',
+            'subject_type' => 'task',
+            'subject_id' => $task->id,
+            'description' => 'Updated task: ' . $task->title,
+        ]);
+
         return redirect()
             ->route('projects.tasks.index', $project)
             ->with('success', 'Task updated successfully.');
@@ -75,7 +91,18 @@ class TaskController extends Controller
 
     public function destroy(Project $project, Task $task): RedirectResponse
     {
+        $taskTitle = $task->title;
+        $taskId = $task->id;
+
         $task->delete();
+
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'action' => 'delete',
+            'subject_type' => 'task',
+            'subject_id' => $taskId,
+            'description' => 'Deleted task: ' . $taskTitle,
+        ]);
 
         return redirect()
             ->route('projects.tasks.index', $project)
@@ -84,12 +111,10 @@ class TaskController extends Controller
 
     public function myTasks(): View
     {
-        $tasks = \App\Models\Task::where('assigned_to', auth()->id())
+        $tasks = Task::where('assigned_to', Auth::id())
             ->latest()
             ->get();
 
         return view('tasks.my', compact('tasks'));
     }
-
-
 }

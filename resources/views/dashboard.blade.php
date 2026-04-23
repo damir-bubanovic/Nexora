@@ -79,6 +79,24 @@
                         Browse Work →
                     </a>
                 </div>
+                <div class="bg-white shadow-sm sm:rounded-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">Recent Activity</h3>
+
+                    @if($recentActivities->isEmpty())
+                        <p class="text-sm text-gray-600">No activity yet.</p>
+                    @else
+                        <div class="space-y-3">
+                            @foreach($recentActivities as $activity)
+                                <div class="border-b pb-2">
+                                    <p class="text-sm text-gray-800">{{ $activity->description }}</p>
+                                    <p class="text-xs text-gray-500">
+                                        {{ $activity->created_at }} · User #{{ $activity->user_id }}
+                                    </p>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
             </div>
 
         </div>

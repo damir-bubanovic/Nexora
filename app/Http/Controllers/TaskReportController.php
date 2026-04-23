@@ -8,6 +8,8 @@ use App\Models\TaskReport;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Models\ActivityLog;
+
 
 class TaskReportController extends Controller
 {
@@ -36,7 +38,15 @@ class TaskReportController extends Controller
         $validated['task_id'] = $task->id;
         $validated['created_by'] = $request->user()->id;
 
-        TaskReport::create($validated);
+        $report = TaskReport::create($validated);
+
+        ActivityLog::create([
+            'user_id' => $request->user()->id,
+            'action' => 'create',
+            'subject_type' => 'task_report',
+            'subject_id' => $report->id,
+            'description' => 'Created report for task: ' . $task->title,
+        ]);
 
         return redirect()
             ->route('projects.tasks.reports.index', [$project, $task])
