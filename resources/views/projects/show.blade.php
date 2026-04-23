@@ -17,11 +17,15 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 space-y-6">
 
+                    <!-- Name -->
                     <div>
                         <h3 class="text-sm font-medium text-gray-500">Name</h3>
-                        <p class="mt-1 text-lg font-semibold text-gray-900">{{ $project->name }}</p>
+                        <p class="mt-1 text-lg font-semibold text-gray-900">
+                            {{ $project->name }}
+                        </p>
                     </div>
 
+                    <!-- Description -->
                     <div>
                         <h3 class="text-sm font-medium text-gray-500">Description</h3>
                         <p class="mt-1 text-gray-700">
@@ -29,42 +33,43 @@
                         </p>
                     </div>
 
+                    <!-- Details -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                        <!-- Status -->
                         <div>
                             <h3 class="text-sm font-medium text-gray-500">Status</h3>
                             <p class="mt-1">
-                                @if ($project->status === 'active')
-                                    <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-800">
-                                        Active
-                                    </span>
-                                @elseif ($project->status === 'pending')
-                                    <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                        Pending
-                                    </span>
-                                @elseif ($project->status === 'completed')
-                                    <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full bg-blue-100 text-blue-800">
-                                        Completed
-                                    </span>
-                                @else
-                                    <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full bg-gray-100 text-gray-800">
-                                        {{ ucfirst($project->status) }}
-                                    </span>
-                                @endif
+                                <x-status-badge :status="$project->status" class="px-3 py-1 text-sm" />
                             </p>
                         </div>
 
+                        <!-- Start Date -->
                         <div>
                             <h3 class="text-sm font-medium text-gray-500">Start Date</h3>
-                            <p class="mt-1 text-gray-700">{{ $project->start_date ?: 'Not set' }}</p>
+                            <p class="mt-1 text-gray-700">
+                                {{ $project->start_date ?: 'Not set' }}
+                            </p>
                         </div>
 
+                        <!-- End Date -->
                         <div>
                             <h3 class="text-sm font-medium text-gray-500">End Date</h3>
-                            <p class="mt-1 text-gray-700">{{ $project->end_date ?: 'Not set' }}</p>
+                            <p class="mt-1 text-gray-700">
+                                {{ $project->end_date ?: 'Not set' }}
+                            </p>
                         </div>
+
                     </div>
 
+                    <!-- Actions -->
                     <div class="pt-4 flex items-center gap-4">
+
+                        <a href="{{ route('projects.tasks.index', $project) }}"
+                           class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 text-sm">
+                            View Tasks
+                        </a>
+
                         <a href="{{ route('projects.edit', $project) }}"
                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
                             Edit Project
@@ -79,6 +84,7 @@
                                 Delete Project
                             </button>
                         </form>
+
                     </div>
 
                 </div>
