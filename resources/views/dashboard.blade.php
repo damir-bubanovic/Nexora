@@ -8,52 +8,77 @@
     <div class="py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-            <!-- Welcome Card -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <h3 class="text-lg font-semibold mb-2">Welcome to Nexora</h3>
                     <p class="text-sm text-gray-600">
-                        You are logged in. Use the modules below to manage projects, tasks, and reports.
+                        Overview of projects, tasks, and reports across the system.
                     </p>
                 </div>
             </div>
 
-            <!-- Modules Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white shadow-sm sm:rounded-lg p-6">
+                    <h3 class="text-sm font-medium text-gray-500">Total Projects</h3>
+                    <p class="mt-2 text-3xl font-bold text-gray-900">{{ $totalProjects }}</p>
+                </div>
 
-                <!-- Projects -->
-                <div class="bg-white shadow-sm sm:rounded-lg p-6 hover:shadow-md transition">
+                <div class="bg-white shadow-sm sm:rounded-lg p-6">
+                    <h3 class="text-sm font-medium text-gray-500">Active Projects</h3>
+                    <p class="mt-2 text-3xl font-bold text-green-600">{{ $activeProjects }}</p>
+                </div>
+
+                <div class="bg-white shadow-sm sm:rounded-lg p-6">
+                    <h3 class="text-sm font-medium text-gray-500">Total Tasks</h3>
+                    <p class="mt-2 text-3xl font-bold text-gray-900">{{ $totalTasks }}</p>
+                </div>
+
+                <div class="bg-white shadow-sm sm:rounded-lg p-6">
+                    <h3 class="text-sm font-medium text-gray-500">Pending Tasks</h3>
+                    <p class="mt-2 text-3xl font-bold text-yellow-600">{{ $pendingTasks }}</p>
+                </div>
+
+                <div class="bg-white shadow-sm sm:rounded-lg p-6">
+                    <h3 class="text-sm font-medium text-gray-500">Completed Tasks</h3>
+                    <p class="mt-2 text-3xl font-bold text-blue-600">{{ $completedTasks }}</p>
+                </div>
+
+                <div class="bg-white shadow-sm sm:rounded-lg p-6">
+                    <h3 class="text-sm font-medium text-gray-500">Total Reports</h3>
+                    <p class="mt-2 text-3xl font-bold text-gray-900">{{ $totalReports }}</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white shadow-sm sm:rounded-lg p-6">
                     <h3 class="text-lg font-semibold mb-2">Projects</h3>
                     <p class="text-sm text-gray-600 mb-4">
-                        Create and manage project workflows.
+                        Manage and review all projects.
                     </p>
                     <a href="{{ route('projects.index') }}" class="text-blue-600 hover:underline text-sm">
                         View Projects →
                     </a>
                 </div>
 
-                <!-- Tasks -->
-                <div class="bg-white shadow-sm sm:rounded-lg p-6 hover:shadow-md transition">
+                <div class="bg-white shadow-sm sm:rounded-lg p-6">
                     <h3 class="text-lg font-semibold mb-2">Tasks</h3>
                     <p class="text-sm text-gray-600 mb-4">
-                        Track sub-tasks, revisions, and progress.
+                        Review project tasks through each project.
                     </p>
-                    <a href="#" class="text-blue-600 hover:underline text-sm">
-                        View Tasks →
+                    <a href="{{ route('projects.index') }}" class="text-blue-600 hover:underline text-sm">
+                        Open Projects →
                     </a>
                 </div>
 
-                <!-- Reports -->
-                <div class="bg-white shadow-sm sm:rounded-lg p-6 hover:shadow-md transition">
+                <div class="bg-white shadow-sm sm:rounded-lg p-6">
                     <h3 class="text-lg font-semibold mb-2">Reports</h3>
                     <p class="text-sm text-gray-600 mb-4">
-                        Review code changes and SQL updates.
+                        Track work summaries, file changes, and SQL notes.
                     </p>
-                    <a href="#" class="text-blue-600 hover:underline text-sm">
-                        View Reports →
+                    <a href="{{ route('projects.index') }}" class="text-blue-600 hover:underline text-sm">
+                        Browse Work →
                     </a>
                 </div>
-
             </div>
 
         </div>
