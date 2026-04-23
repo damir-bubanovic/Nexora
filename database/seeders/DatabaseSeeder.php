@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
+use App\Models\TaskReport;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -38,6 +39,15 @@ class DatabaseSeeder extends Seeder
                         $task->project_id = $project->id;
                         $task->created_by = $owner->id;
                         $task->save();
+
+                        TaskReport::factory()
+                            ->count(rand(1, 3))
+                            ->make()
+                            ->each(function ($report) use ($task, $owner) {
+                                $report->task_id = $task->id;
+                                $report->created_by = $owner->id;
+                                $report->save();
+                            });
                     });
             });
     }
