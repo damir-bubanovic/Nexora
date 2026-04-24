@@ -35,11 +35,20 @@ class DatabaseSeeder extends Seeder
             ->count(30)
             ->make()
             ->each(function ($project) use ($users) {
-
                 $owner = $users->random();
 
                 $project->created_by = $owner->id;
                 $project->save();
+
+                // Assign 1–3 random users to the project
+                $assignedUsers = $users->random(rand(1, 3))->pluck('id')->toArray();
+
+                // Make sure the project owner is assigned too
+                if (! in_array($owner->id, $assignedUsers)) {
+                    $assignedUsers[] = $owner->id;
+                }
+
+                $project->users()->sync($assignedUsers);
 
                 // Create tasks
                 Task::factory()
