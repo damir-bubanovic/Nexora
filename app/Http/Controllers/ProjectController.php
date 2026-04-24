@@ -15,7 +15,16 @@ class ProjectController extends Controller
 {
     public function index(): View
     {
+        /** @var User|null $user */
+        $user = Auth::user();
+
         $query = Project::query();
+
+        if (! $user || ! $user->isAdmin()) {
+            $query->whereHas('users', function ($q) use ($user) {
+                $q->where('users.id', $user?->id);
+            });
+        }
 
         if (request('status')) {
             $query->where('status', request('status'));
@@ -35,6 +44,16 @@ class ProjectController extends Controller
 
     public function show(Project $project): View
     {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if (
+            ! $user->isAdmin() &&
+            ! $project->users->contains($user->id)
+        ) {
+            abort(403);
+        }
+
         return view('projects.show', compact('project'));
     }
 
@@ -69,6 +88,16 @@ class ProjectController extends Controller
 
     public function edit(Project $project): View
     {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if (
+            ! $user->isAdmin() &&
+            ! $project->users->contains($user->id)
+        ) {
+            abort(403);
+        }
+
         $users = User::all();
 
         return view('projects.edit', compact('project', 'users'));
@@ -76,6 +105,16 @@ class ProjectController extends Controller
 
     public function update(UpdateProjectRequest $request, Project $project): RedirectResponse
     {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if (
+            ! $user->isAdmin() &&
+            ! $project->users->contains($user->id)
+        ) {
+            abort(403);
+        }
+
         $validated = $request->validated();
 
         $project->update($validated);

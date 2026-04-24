@@ -13,8 +13,26 @@ use Illuminate\View\View;
 
 class TaskController extends Controller
 {
+    private function authorizeProjectAccess(Project $project): void
+    {
+        /** @var User|null $user */
+        $user = Auth::user();
+
+        if (
+            ! $user ||
+            (
+                ! $user->isAdmin() &&
+                ! $project->users->contains($user->id)
+            )
+        ) {
+            abort(403);
+        }
+    }
+
     public function index(Project $project): View
     {
+        $this->authorizeProjectAccess($project);
+
         $tasks = $project->tasks()->latest()->get();
 
         return view('tasks.index', compact('project', 'tasks'));
@@ -22,6 +40,8 @@ class TaskController extends Controller
 
     public function create(Project $project): View
     {
+        $this->authorizeProjectAccess($project);
+
         $users = User::all();
 
         return view('tasks.create', compact('project', 'users'));
@@ -29,6 +49,8 @@ class TaskController extends Controller
 
     public function store(Request $request, Project $project): RedirectResponse
     {
+        $this->authorizeProjectAccess($project);
+
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
@@ -58,6 +80,8 @@ class TaskController extends Controller
 
     public function edit(Project $project, Task $task): View
     {
+        $this->authorizeProjectAccess($project);
+
         $users = User::all();
 
         return view('tasks.edit', compact('project', 'task', 'users'));
@@ -65,6 +89,8 @@ class TaskController extends Controller
 
     public function update(Request $request, Project $project, Task $task): RedirectResponse
     {
+        $this->authorizeProjectAccess($project);
+
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
@@ -91,6 +117,8 @@ class TaskController extends Controller
 
     public function destroy(Project $project, Task $task): RedirectResponse
     {
+        $this->authorizeProjectAccess($project);
+
         $taskTitle = $task->title;
         $taskId = $task->id;
 
