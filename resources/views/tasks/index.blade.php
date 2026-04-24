@@ -68,20 +68,24 @@
                                             Bugs
                                         </a>
 
-                                        <a href="{{ route('projects.tasks.edit', [$project, $task]) }}"
-                                           class="text-blue-600 hover:underline text-sm">
-                                            Edit
-                                        </a>
+                                        @auth
+                                            @if(auth()->user()->isAdmin() || $task->assigned_to === auth()->id())
+                                                <a href="{{ route('projects.tasks.edit', [$project, $task]) }}"
+                                                   class="text-blue-600 hover:underline text-sm">
+                                                    Edit
+                                                </a>
 
-                                        <form method="POST"
-                                              action="{{ route('projects.tasks.destroy', [$project, $task]) }}"
-                                              onsubmit="return confirm('Delete this task?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="text-red-600 hover:underline text-sm">
-                                                Delete
-                                            </button>
-                                        </form>
+                                                <form method="POST"
+                                                      action="{{ route('projects.tasks.destroy', [$project, $task]) }}"
+                                                      onsubmit="return confirm('Delete this task?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="text-red-600 hover:underline text-sm">
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        @endauth
 
                                     </div>
                                 </td>
