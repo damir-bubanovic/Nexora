@@ -63,6 +63,24 @@
                             </div>
                         </div>
 
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Assign Users</label>
+
+                            <select name="users[]" multiple
+                                    class="mt-1 block w-full rounded border-gray-300 shadow-sm">
+                                @foreach($users as $user)
+                                    <option value="{{ $user->id }}"
+                                        {{ collect(old('users'))->contains($user->id) ? 'selected' : '' }}>
+                                        {{ $user->name }} ({{ $user->role }})
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            @error('users')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         <div class="flex justify-end">
                             <button type="submit"
                                 class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">

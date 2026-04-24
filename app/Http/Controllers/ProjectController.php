@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\ActivityLog;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -39,7 +40,9 @@ class ProjectController extends Controller
 
     public function create(): View
     {
-        return view('projects.create');
+        $users = User::all();
+
+        return view('projects.create', compact('users'));
     }
 
     public function store(StoreProjectRequest $request): RedirectResponse
@@ -48,6 +51,8 @@ class ProjectController extends Controller
         $validated['created_by'] = $request->user()->getAuthIdentifier();
 
         $project = Project::create($validated);
+
+        $project->users()->sync($request->input('users', []));
 
         ActivityLog::create([
             'user_id' => $request->user()->getAuthIdentifier(),
@@ -64,7 +69,9 @@ class ProjectController extends Controller
 
     public function edit(Project $project): View
     {
-        return view('projects.edit', compact('project'));
+        $users = User::all();
+
+        return view('projects.edit', compact('project', 'users'));
     }
 
     public function update(UpdateProjectRequest $request, Project $project): RedirectResponse
@@ -72,6 +79,8 @@ class ProjectController extends Controller
         $validated = $request->validated();
 
         $project->update($validated);
+
+        $project->users()->sync($request->input('users', []));
 
         ActivityLog::create([
             'user_id' => $request->user()->getAuthIdentifier(),
@@ -88,7 +97,10 @@ class ProjectController extends Controller
 
     public function destroy(Project $project): RedirectResponse
     {
-        if (! Auth::user()->isAdmin()) {
+        /** @var User|null $currentUser */
+        $currentUser = Auth::user();
+
+        if (! $currentUser || ! $currentUser->isAdmin()) {
             abort(403, 'Unauthorized');
         }
 

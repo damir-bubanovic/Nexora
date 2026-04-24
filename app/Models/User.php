@@ -62,4 +62,9 @@ class User extends Authenticatable
     {
         return $this->role === 'client';
     }
+
+    public function assignedProjects()
+    {
+        return $this->belongsToMany(Project::class);
+    }
 }

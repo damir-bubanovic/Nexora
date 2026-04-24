@@ -60,6 +60,25 @@
                             </p>
                         </div>
 
+                        <!-- Assigned Users -->
+                        <div class="md:col-span-3">
+                            <h3 class="text-sm font-medium text-gray-500">Assigned Users</h3>
+
+                            <div class="mt-2 space-y-1">
+                                @forelse($project->users as $user)
+                                    <p class="text-gray-700 text-sm">
+                                        {{ $user->name }} ({{ $user->role }})
+                                    </p>
+                                @empty
+                                    <p class="text-gray-500 text-sm">
+                                        No users assigned.
+                                    </p>
+                                @endforelse
+                            </div>
+                        </div>
+
+
+
                     </div>
 
                     <!-- Actions -->
@@ -75,15 +94,19 @@
                             Edit Project
                         </a>
 
-                        <form method="POST" action="{{ route('projects.destroy', $project) }}"
-                              onsubmit="return confirm('Are you sure you want to delete this project?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"
-                                    class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 text-sm">
-                                Delete Project
-                            </button>
-                        </form>
+                        @auth
+                            @if(auth()->user()->isAdmin())
+                                <form method="POST" action="{{ route('projects.destroy', $project) }}"
+                                      onsubmit="return confirm('Are you sure you want to delete this project?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                            class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 text-sm">
+                                        Delete Project
+                                    </button>
+                                </form>
+                            @endif
+                        @endauth
 
                     </div>
 
