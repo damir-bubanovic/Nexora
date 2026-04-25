@@ -40,7 +40,19 @@
                                 <td class="border px-3 py-2">{{ $task->title }}</td>
 
                                 <td class="border px-3 py-2">
-                                    <x-status-badge :status="$task->status" />
+                                    <form method="POST" action="{{ route('projects.tasks.update', [$project, $task]) }}">
+                                        @csrf
+                                        @method('PUT')
+
+                                        <select name="status" onchange="this.form.submit()"
+                                                class="text-xs border rounded p-1">
+
+                                            <option value="pending" {{ $task->status === 'pending' ? 'selected' : '' }}>Pending</option>
+                                            <option value="active" {{ $task->status === 'active' ? 'selected' : '' }}>Active</option>
+                                            <option value="completed" {{ $task->status === 'completed' ? 'selected' : '' }}>Completed</option>
+
+                                        </select>
+                                    </form>
                                 </td>
 
                                 <td class="border px-3 py-2">

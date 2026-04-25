@@ -70,7 +70,7 @@ class TaskController extends Controller
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'status' => ['required', 'string'],
+            'status' => ['required', 'in:pending,active,completed'],
             'priority' => ['required', 'integer'],
             'due_date' => ['nullable', 'date'],
             'assigned_to' => ['nullable', 'exists:users,id'],
@@ -110,10 +110,10 @@ class TaskController extends Controller
         $this->authorizeTaskAccess($task);
 
         $validated = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
+            'title' => ['sometimes', 'required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'status' => ['required', 'string'],
-            'priority' => ['required', 'integer'],
+            'status' => ['sometimes', 'in:pending,active,completed'],
+            'priority' => ['sometimes', 'integer'],
             'due_date' => ['nullable', 'date'],
             'assigned_to' => ['nullable', 'exists:users,id'],
         ]);
