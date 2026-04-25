@@ -42,6 +42,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/projects/{project}/tasks/{task}/reports/create', [TaskReportController::class, 'create'])->name('projects.tasks.reports.create');
     Route::post('/projects/{project}/tasks/{task}/reports', [TaskReportController::class, 'store'])->name('projects.tasks.reports.store');
     Route::get('/projects/{project}/tasks/{task}/reports/export', [TaskReportController::class, 'export'])->name('projects.tasks.reports.export');
+    Route::get('projects/{project}/tasks/{task}/reports/download', [TaskReportController::class, 'download']
+    )->name('projects.tasks.reports.download');
 
     Route::get('/projects/{project}/tasks/{task}/reports/{report}/revisions', [TaskReportRevisionController::class, 'index'])->name('projects.tasks.reports.revisions.index');
     Route::get('/projects/{project}/tasks/{task}/reports/{report}/revisions/create', [TaskReportRevisionController::class, 'create'])->name('projects.tasks.reports.revisions.create');

@@ -11,11 +11,17 @@
                     Export
                 </a>
 
+                <a href="{{ route('projects.tasks.reports.download', [$project, $task]) }}"
+                   class="inline-flex items-center bg-white text-gray-800 border border-gray-300 px-4 py-2 rounded text-sm hover:bg-gray-100">
+                    Download .md
+                </a>
+
                 <a href="{{ route('projects.tasks.reports.create', [$project, $task]) }}"
                    class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">
                     New Report
                 </a>
             </div>
+
         </div>
     </x-slot>
 
