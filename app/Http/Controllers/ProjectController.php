@@ -44,15 +44,7 @@ class ProjectController extends Controller
 
     public function show(Project $project): View
     {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-
-        if (
-            ! $user->isAdmin() &&
-            ! $project->users->contains($user->id)
-        ) {
-            abort(403);
-        }
+        $this->authorizeProjectAccess($project);
 
         return view('projects.show', compact('project'));
     }
@@ -88,15 +80,7 @@ class ProjectController extends Controller
 
     public function edit(Project $project): View
     {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-
-        if (
-            ! $user->isAdmin() &&
-            ! $project->users->contains($user->id)
-        ) {
-            abort(403);
-        }
+        $this->authorizeProjectAccess($project);
 
         $users = User::all();
 
@@ -105,15 +89,7 @@ class ProjectController extends Controller
 
     public function update(UpdateProjectRequest $request, Project $project): RedirectResponse
     {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-
-        if (
-            ! $user->isAdmin() &&
-            ! $project->users->contains($user->id)
-        ) {
-            abort(403);
-        }
+        $this->authorizeProjectAccess($project);
 
         $validated = $request->validated();
 
@@ -136,12 +112,7 @@ class ProjectController extends Controller
 
     public function destroy(Project $project): RedirectResponse
     {
-        /** @var User|null $currentUser */
-        $currentUser = Auth::user();
-
-        if (! $currentUser || ! $currentUser->isAdmin()) {
-            abort(403, 'Unauthorized');
-        }
+        $this->authorizeAdmin();
 
         $projectName = $project->name;
         $projectId = $project->id;

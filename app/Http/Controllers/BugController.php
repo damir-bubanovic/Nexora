@@ -16,6 +16,9 @@ class BugController extends Controller
 {
     public function index(Project $project, Task $task): View
     {
+        $this->authorizeNestedTask($project, $task);
+        $this->authorizeTaskAccess($task);
+
         $bugs = $task->bugs()->latest()->get();
 
         return view('bugs.index', compact('project', 'task', 'bugs'));
@@ -23,6 +26,9 @@ class BugController extends Controller
 
     public function create(Project $project, Task $task): View
     {
+        $this->authorizeNestedTask($project, $task);
+        $this->authorizeTaskAccess($task);
+
         $users = User::all();
 
         return view('bugs.create', compact('project', 'task', 'users'));
@@ -30,6 +36,9 @@ class BugController extends Controller
 
     public function store(Request $request, Project $project, Task $task): RedirectResponse
     {
+        $this->authorizeNestedTask($project, $task);
+        $this->authorizeTaskAccess($task);
+
         $validated = $request->validate([
             'title' => ['required', 'string'],
             'description' => ['required', 'string'],
@@ -57,6 +66,9 @@ class BugController extends Controller
 
     public function edit(Project $project, Task $task, Bug $bug): View
     {
+        $this->authorizeNestedTask($project, $task);
+        $this->authorizeBugAccess($task, $bug);
+
         $users = User::all();
 
         return view('bugs.edit', compact('project', 'task', 'bug', 'users'));
@@ -64,6 +76,9 @@ class BugController extends Controller
 
     public function update(Request $request, Project $project, Task $task, Bug $bug): RedirectResponse
     {
+        $this->authorizeNestedTask($project, $task);
+        $this->authorizeBugAccess($task, $bug);
+
         $validated = $request->validate([
             'title' => ['required', 'string'],
             'description' => ['required', 'string'],
@@ -99,6 +114,9 @@ class BugController extends Controller
 
     public function destroy(Project $project, Task $task, Bug $bug): RedirectResponse
     {
+        $this->authorizeNestedTask($project, $task);
+        $this->authorizeBugAccess($task, $bug);
+
         $bugTitle = $bug->title;
         $bugId = $bug->id;
 

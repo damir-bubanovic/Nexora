@@ -13,38 +13,6 @@ use Illuminate\View\View;
 
 class TaskController extends Controller
 {
-    private function authorizeProjectAccess(Project $project): void
-    {
-        /** @var User|null $user */
-        $user = Auth::user();
-
-        if (
-            ! $user ||
-            (
-                ! $user->isAdmin() &&
-                ! $project->users->contains($user->id)
-            )
-        ) {
-            abort(403);
-        }
-    }
-
-    private function authorizeTaskAccess(Task $task): void
-    {
-        /** @var User|null $user */
-        $user = Auth::user();
-
-        if (
-            ! $user ||
-            (
-                ! $user->isAdmin() &&
-                $task->assigned_to !== $user->id
-            )
-        ) {
-            abort(403);
-        }
-    }
-
     public function index(Project $project): View
     {
         $this->authorizeProjectAccess($project);
@@ -96,7 +64,7 @@ class TaskController extends Controller
 
     public function edit(Project $project, Task $task): View
     {
-        $this->authorizeProjectAccess($project);
+        $this->authorizeNestedTask($project, $task);
         $this->authorizeTaskAccess($task);
 
         $users = User::all();
@@ -106,7 +74,7 @@ class TaskController extends Controller
 
     public function update(Request $request, Project $project, Task $task): RedirectResponse
     {
-        $this->authorizeProjectAccess($project);
+        $this->authorizeNestedTask($project, $task);
         $this->authorizeTaskAccess($task);
 
         $validated = $request->validate([
@@ -135,7 +103,7 @@ class TaskController extends Controller
 
     public function destroy(Project $project, Task $task): RedirectResponse
     {
-        $this->authorizeProjectAccess($project);
+        $this->authorizeNestedTask($project, $task);
         $this->authorizeTaskAccess($task);
 
         $taskTitle = $task->title;

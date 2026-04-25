@@ -14,6 +14,9 @@ class TaskReportRevisionController extends Controller
 {
     public function index(Project $project, Task $task, TaskReport $report): View
     {
+        $this->authorizeNestedTask($project, $task);
+        $this->authorizeReportAccess($task, $report);
+
         $revisions = $report->revisions()->latest()->get();
 
         return view('task-report-revisions.index', compact('project', 'task', 'report', 'revisions'));
@@ -21,11 +24,17 @@ class TaskReportRevisionController extends Controller
 
     public function create(Project $project, Task $task, TaskReport $report): View
     {
+        $this->authorizeNestedTask($project, $task);
+        $this->authorizeReportAccess($task, $report);
+
         return view('task-report-revisions.create', compact('project', 'task', 'report'));
     }
 
     public function store(Request $request, Project $project, Task $task, TaskReport $report): RedirectResponse
     {
+        $this->authorizeNestedTask($project, $task);
+        $this->authorizeReportAccess($task, $report);
+
         $validated = $request->validate([
             'notes' => ['required', 'string'],
             'status' => ['required', 'string', 'max:50'],

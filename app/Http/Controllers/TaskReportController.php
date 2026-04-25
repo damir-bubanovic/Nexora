@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\TaskReport;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Models\ActivityLog;
-
 
 class TaskReportController extends Controller
 {
     public function index(Project $project, Task $task): View
     {
+        $this->authorizeNestedTask($project, $task);
+        $this->authorizeTaskAccess($task);
+
         $reports = $task->reports()->latest()->get();
 
         return view('task-reports.index', compact('project', 'task', 'reports'));
@@ -22,11 +24,17 @@ class TaskReportController extends Controller
 
     public function create(Project $project, Task $task): View
     {
+        $this->authorizeNestedTask($project, $task);
+        $this->authorizeTaskAccess($task);
+
         return view('task-reports.create', compact('project', 'task'));
     }
 
     public function store(Request $request, Project $project, Task $task): RedirectResponse
     {
+        $this->authorizeNestedTask($project, $task);
+        $this->authorizeTaskAccess($task);
+
         $validated = $request->validate([
             'summary' => ['required', 'string'],
             'changed_files' => ['nullable', 'string'],
@@ -55,6 +63,9 @@ class TaskReportController extends Controller
 
     public function export(Project $project, Task $task): View
     {
+        $this->authorizeNestedTask($project, $task);
+        $this->authorizeTaskAccess($task);
+
         $reports = $task->reports()->latest()->get();
 
         return view('task-reports.export', compact('project', 'task', 'reports'));

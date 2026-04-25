@@ -5,19 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class UserController extends Controller
 {
     public function index(): View
     {
-        /** @var User|null $currentUser */
-        $currentUser = Auth::user();
-
-        if (! $currentUser || ! $currentUser->isAdmin()) {
-            abort(403);
-        }
+        $this->authorizeAdmin();
 
         $users = User::latest()->get();
 
@@ -26,12 +20,7 @@ class UserController extends Controller
 
     public function updateRole(Request $request, User $user): RedirectResponse
     {
-        /** @var User|null $currentUser */
-        $currentUser = Auth::user();
-
-        if (! $currentUser || ! $currentUser->isAdmin()) {
-            abort(403);
-        }
+        $this->authorizeAdmin();
 
         $request->validate([
             'role' => ['required', 'in:admin,developer,client'],
