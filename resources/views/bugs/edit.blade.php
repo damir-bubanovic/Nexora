@@ -22,9 +22,26 @@
                       required>{{ old('description', $bug->description) }}</textarea>
 
             <select name="status" class="w-full border rounded p-2">
-                <option value="open" {{ $bug->status === 'open' ? 'selected' : '' }}>Open</option>
-                <option value="in_progress" {{ $bug->status === 'in_progress' ? 'selected' : '' }}>In Progress</option>
-                <option value="resolved" {{ $bug->status === 'resolved' ? 'selected' : '' }}>Resolved</option>
+
+                <option value="open"
+                    {{ $bug->status === 'open' ? 'selected' : '' }}>
+                    Open
+                </option>
+
+                <option value="in_progress"
+                    {{ $bug->status === 'in_progress' ? 'selected' : '' }}>
+                    In Progress
+                </option>
+
+                <option value="resolved"
+                    {{ $bug->status === 'resolved' ? 'selected' : '' }}
+                    @if(!auth()->user()->isAdmin() && $bug->assigned_to !== auth()->id())
+                        disabled
+                    @endif
+                >
+                    Resolved
+                </option>
+
             </select>
 
             <select name="assigned_to" class="w-full border rounded p-2">

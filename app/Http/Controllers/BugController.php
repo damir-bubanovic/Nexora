@@ -7,9 +7,9 @@ use App\Models\Bug;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class BugController extends Controller
@@ -55,7 +55,6 @@ class BugController extends Controller
             ->with('success', 'Bug created successfully.');
     }
 
-
     public function edit(Project $project, Task $task, Bug $bug): View
     {
         $users = User::all();
@@ -71,6 +70,17 @@ class BugController extends Controller
             'status' => ['required', 'in:open,in_progress,resolved'],
             'assigned_to' => ['nullable', 'exists:users,id'],
         ]);
+
+        /** @var User $user */
+        $user = $request->user();
+
+        if (
+            $validated['status'] === 'resolved' &&
+            ! $user->isAdmin() &&
+            $bug->assigned_to !== $user->getAuthIdentifier()
+        ) {
+            abort(403, 'Only assigned developer can resolve this bug.');
+        }
 
         $bug->update($validated);
 
@@ -90,6 +100,7 @@ class BugController extends Controller
     public function destroy(Project $project, Task $task, Bug $bug): RedirectResponse
     {
         $bugTitle = $bug->title;
+        $bugId = $bug->id;
 
         $bug->delete();
 
@@ -97,7 +108,7 @@ class BugController extends Controller
             'user_id' => Auth::id(),
             'action' => 'delete',
             'subject_type' => 'bug',
-            'subject_id' => $bug->id,
+            'subject_id' => $bugId,
             'description' => 'Deleted bug: ' . $bugTitle,
         ]);
 
@@ -105,7 +116,4 @@ class BugController extends Controller
             ->route('projects.tasks.bugs.index', [$project, $task])
             ->with('success', 'Bug deleted successfully.');
     }
-
-
-
 }
