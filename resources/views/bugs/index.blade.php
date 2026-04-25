@@ -1,34 +1,58 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800">
+            <h2 class="text-xl font-semibold text-gray-800">
                 Bugs for {{ $task->title }}
             </h2>
 
             <a href="{{ route('projects.tasks.bugs.create', [$project, $task]) }}"
-               class="bg-red-600 text-white px-4 py-2 rounded text-sm">
-                Report Bug
+               class="bg-blue-600 text-white px-4 py-2 rounded text-sm">
+                New Bug
             </a>
         </div>
     </x-slot>
 
     <div class="p-6">
-        @if($bugs->isEmpty())
-            <p>No bugs reported.</p>
-        @else
-            <div class="space-y-4">
-                @foreach($bugs as $bug)
-                    <div class="bg-white shadow-sm rounded p-4 border">
-                        <h3 class="font-semibold">{{ $bug->title }}</h3>
-                        <p class="text-sm text-gray-600">{{ $bug->description }}</p>
-
-                        <div class="mt-2 text-sm">
-                            Status: <strong>{{ $bug->status }}</strong><br>
-                            Assigned: {{ $bug->assignee?->name ?? '—' }}
-                        </div>
-                    </div>
-                @endforeach
+        @if(session('success'))
+            <div class="mb-4 bg-green-100 text-green-800 p-3 rounded">
+                {{ session('success') }}
             </div>
+        @endif
+
+        @if($bugs->isEmpty())
+            <p class="text-gray-600">No bugs reported.</p>
+        @else
+            <table class="min-w-full border">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-3 py-2 border text-left">Title</th>
+                        <th class="px-3 py-2 border text-left">Status</th>
+                        <th class="px-3 py-2 border text-left">Assigned</th>
+                        <th class="px-3 py-2 border text-left">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($bugs as $bug)
+                        <tr>
+                            <td class="px-3 py-2 border">{{ $bug->title }}</td>
+
+                            <td class="px-3 py-2 border">
+                                <span class="text-sm font-semibold">
+                                    {{ ucfirst(str_replace('_', ' ', $bug->status)) }}
+                                </span>
+                            </td>
+
+                            <td class="px-3 py-2 border">
+                                {{ $bug->assignee?->name ?? '—' }}
+                            </td>
+
+                            <td class="px-3 py-2 border">
+                                {{ $bug->description }}
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         @endif
     </div>
 </x-app-layout>

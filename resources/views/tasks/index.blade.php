@@ -70,14 +70,14 @@
                                 <td class="border px-3 py-2">
                                     <div class="flex items-center gap-3">
 
-                                        <a href="{{ route('projects.tasks.reports.index', [$project, $task]) }}"
-                                           class="text-gray-700 hover:underline text-sm">
-                                            Reports
-                                        </a>
-
                                         <a href="{{ route('projects.tasks.bugs.index', [$project, $task]) }}"
                                            class="text-red-600 hover:underline text-sm">
                                             Bugs
+                                        </a>
+
+                                        <a href="{{ route('projects.tasks.reports.index', [$project, $task]) }}"
+                                           class="text-gray-700 hover:underline text-sm">
+                                            Reports
                                         </a>
 
                                         @auth

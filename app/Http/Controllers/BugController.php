@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Bug;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Models\ActivityLog;
-
 
 class BugController extends Controller
 {
@@ -33,17 +32,17 @@ class BugController extends Controller
         $validated = $request->validate([
             'title' => ['required', 'string'],
             'description' => ['required', 'string'],
-            'status' => ['required', 'string'],
+            'status' => ['required', 'in:open,in_progress,resolved'],
             'assigned_to' => ['nullable', 'exists:users,id'],
         ]);
 
         $validated['task_id'] = $task->id;
-        $validated['created_by'] = $request->user()->id;
+        $validated['created_by'] = $request->user()->getAuthIdentifier();
 
         $bug = Bug::create($validated);
 
         ActivityLog::create([
-            'user_id' => $request->user()->id,
+            'user_id' => $request->user()->getAuthIdentifier(),
             'action' => 'create',
             'subject_type' => 'bug',
             'subject_id' => $bug->id,
