@@ -7,8 +7,9 @@ use App\Models\Task;
 use App\Models\TaskReport;
 use App\Models\TaskReportRevision;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Http\Requests\StoreTaskReportRevisionRequest;
+
 
 class TaskReportRevisionController extends Controller
 {
@@ -30,15 +31,12 @@ class TaskReportRevisionController extends Controller
         return view('task-report-revisions.create', compact('project', 'task', 'report'));
     }
 
-    public function store(Request $request, Project $project, Task $task, TaskReport $report): RedirectResponse
+    public function store(StoreTaskReportRevisionRequest $request, Project $project, Task $task, TaskReport $report): RedirectResponse
     {
         $this->authorizeNestedTask($project, $task);
         $this->authorizeReportAccess($task, $report);
 
-        $validated = $request->validate([
-            'notes' => ['required', 'string'],
-            'status' => ['required', 'string', 'max:50'],
-        ]);
+        $validated = $request->validated();
 
         $validated['task_report_id'] = $report->id;
         $validated['created_by'] = $request->user()->id;

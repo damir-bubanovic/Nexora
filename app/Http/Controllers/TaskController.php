@@ -10,6 +10,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
+
 
 class TaskController extends Controller
 {
@@ -31,18 +34,11 @@ class TaskController extends Controller
         return view('tasks.create', compact('project', 'users'));
     }
 
-    public function store(Request $request, Project $project): RedirectResponse
+    public function store(StoreTaskRequest $request, Project $project): RedirectResponse
     {
         $this->authorizeProjectAccess($project);
 
-        $validated = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'status' => ['required', 'in:pending,active,completed'],
-            'priority' => ['required', 'integer'],
-            'due_date' => ['nullable', 'date'],
-            'assigned_to' => ['nullable', 'exists:users,id'],
-        ]);
+        $validated = $request->validated();
 
         $validated['project_id'] = $project->id;
         $validated['created_by'] = $request->user()->getAuthIdentifier();
@@ -72,19 +68,12 @@ class TaskController extends Controller
         return view('tasks.edit', compact('project', 'task', 'users'));
     }
 
-    public function update(Request $request, Project $project, Task $task): RedirectResponse
+    public function update(UpdateTaskRequest $request, Project $project, Task $task): RedirectResponse
     {
         $this->authorizeNestedTask($project, $task);
         $this->authorizeTaskAccess($task);
 
-        $validated = $request->validate([
-            'title' => ['sometimes', 'required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'status' => ['sometimes', 'in:pending,active,completed'],
-            'priority' => ['sometimes', 'integer'],
-            'due_date' => ['nullable', 'date'],
-            'assigned_to' => ['nullable', 'exists:users,id'],
-        ]);
+        $validated = $request->validated();
 
         $task->update($validated);
 

@@ -11,6 +11,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Http\Requests\StoreBugRequest;
+use App\Http\Requests\UpdateBugRequest;
+
 
 class BugController extends Controller
 {
@@ -34,17 +37,12 @@ class BugController extends Controller
         return view('bugs.create', compact('project', 'task', 'users'));
     }
 
-    public function store(Request $request, Project $project, Task $task): RedirectResponse
+    public function store(StoreBugRequest $request, Project $project, Task $task): RedirectResponse
     {
         $this->authorizeNestedTask($project, $task);
         $this->authorizeTaskAccess($task);
 
-        $validated = $request->validate([
-            'title' => ['required', 'string'],
-            'description' => ['required', 'string'],
-            'status' => ['required', 'in:open,in_progress,resolved'],
-            'assigned_to' => ['nullable', 'exists:users,id'],
-        ]);
+        $validated = $request->validated();
 
         $validated['task_id'] = $task->id;
         $validated['created_by'] = $request->user()->getAuthIdentifier();
@@ -74,17 +72,12 @@ class BugController extends Controller
         return view('bugs.edit', compact('project', 'task', 'bug', 'users'));
     }
 
-    public function update(Request $request, Project $project, Task $task, Bug $bug): RedirectResponse
+    public function update(UpdateBugRequest $request, Project $project, Task $task, Bug $bug): RedirectResponse
     {
         $this->authorizeNestedTask($project, $task);
         $this->authorizeBugAccess($task, $bug);
 
-        $validated = $request->validate([
-            'title' => ['required', 'string'],
-            'description' => ['required', 'string'],
-            'status' => ['required', 'in:open,in_progress,resolved'],
-            'assigned_to' => ['nullable', 'exists:users,id'],
-        ]);
+        $validated = $request->validated();
 
         /** @var User $user */
         $user = $request->user();
