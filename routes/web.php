@@ -9,7 +9,9 @@ use App\Http\Controllers\TaskReportRevisionController;
 use App\Http\Controllers\UserController;
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\Bug;
 use App\Models\TaskReport;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
@@ -22,10 +24,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('dashboard', [
             'totalProjects' => Project::count(),
             'activeProjects' => Project::where('status', 'active')->count(),
+
             'totalTasks' => Task::count(),
             'pendingTasks' => Task::where('status', 'pending')->count(),
             'completedTasks' => Task::where('status', 'completed')->count(),
+
             'totalReports' => TaskReport::count(),
+
+            'totalBugs' => \App\Models\Bug::count(),
+            'openBugs' => \App\Models\Bug::where('status', 'open')->count(),
+            'inProgressBugs' => \App\Models\Bug::where('status', 'in_progress')->count(),
+            'resolvedBugs' => \App\Models\Bug::where('status', 'resolved')->count(),
+
+            'myTasksCount' => Task::where('assigned_to', Auth::id())->count(),
+            'myOpenBugs' => \App\Models\Bug::where('assigned_to', Auth::id())
+                ->where('status', '!=', 'resolved')
+                ->count(),
+
             'recentActivities' => \App\Models\ActivityLog::latest()->take(10)->get(),
         ]);
     })->name('dashboard');

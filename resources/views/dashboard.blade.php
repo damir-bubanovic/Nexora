@@ -12,7 +12,7 @@
                 <div class="p-6 text-gray-900">
                     <h3 class="text-lg font-semibold mb-2">Welcome to Nexora</h3>
                     <p class="text-sm text-gray-600">
-                        Overview of projects, tasks, and reports across the system.
+                        Overview of projects, tasks, reports, bugs, and current workload.
                     </p>
                 </div>
             </div>
@@ -49,6 +49,40 @@
                 </div>
             </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-white p-4 rounded shadow">
+                    <h3 class="text-sm text-gray-500">Total Bugs</h3>
+                    <p class="text-2xl font-bold">{{ $totalBugs }}</p>
+                </div>
+
+                <div class="bg-white p-4 rounded shadow">
+                    <h3 class="text-sm text-gray-500">Open Bugs</h3>
+                    <p class="text-2xl font-bold text-red-600">{{ $openBugs }}</p>
+                </div>
+
+                <div class="bg-white p-4 rounded shadow">
+                    <h3 class="text-sm text-gray-500">In Progress Bugs</h3>
+                    <p class="text-2xl font-bold text-yellow-600">{{ $inProgressBugs }}</p>
+                </div>
+
+                <div class="bg-white p-4 rounded shadow">
+                    <h3 class="text-sm text-gray-500">Resolved Bugs</h3>
+                    <p class="text-2xl font-bold text-green-600">{{ $resolvedBugs }}</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white p-4 rounded shadow">
+                    <h3 class="text-sm text-gray-500">My Tasks</h3>
+                    <p class="text-2xl font-bold">{{ $myTasksCount }}</p>
+                </div>
+
+                <div class="bg-white p-4 rounded shadow">
+                    <h3 class="text-sm text-gray-500">My Open Bugs</h3>
+                    <p class="text-2xl font-bold text-red-600">{{ $myOpenBugs }}</p>
+                </div>
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-white shadow-sm sm:rounded-lg p-6">
                     <h3 class="text-lg font-semibold mb-2">Projects</h3>
@@ -63,10 +97,10 @@
                 <div class="bg-white shadow-sm sm:rounded-lg p-6">
                     <h3 class="text-lg font-semibold mb-2">Tasks</h3>
                     <p class="text-sm text-gray-600 mb-4">
-                        Review project tasks through each project.
+                        Review your assigned work.
                     </p>
-                    <a href="{{ route('projects.index') }}" class="text-blue-600 hover:underline text-sm">
-                        Open Projects →
+                    <a href="{{ route('tasks.my') }}" class="text-blue-600 hover:underline text-sm">
+                        View My Tasks →
                     </a>
                 </div>
 
@@ -79,24 +113,27 @@
                         Browse Work →
                     </a>
                 </div>
-                <div class="bg-white shadow-sm sm:rounded-lg p-6">
-                    <h3 class="text-lg font-semibold mb-4">Recent Activity</h3>
+            </div>
 
-                    @if($recentActivities->isEmpty())
-                        <p class="text-sm text-gray-600">No activity yet.</p>
-                    @else
-                        <div class="space-y-3">
-                            @foreach($recentActivities as $activity)
-                                <div class="border-b pb-2">
-                                    <p class="text-sm text-gray-800">{{ $activity->description }}</p>
-                                    <p class="text-xs text-gray-500">
-                                        {{ $activity->created_at }} · User #{{ $activity->user_id }}
-                                    </p>
-                                </div>
-                            @endforeach
-                        </div>
-                    @endif
-                </div>
+            <div class="bg-white shadow-sm sm:rounded-lg p-6">
+                <h3 class="text-lg font-semibold mb-4">Recent Activity</h3>
+
+                @if($recentActivities->isEmpty())
+                    <p class="text-sm text-gray-600">No activity yet.</p>
+                @else
+                    <ul class="space-y-3">
+                        @foreach($recentActivities as $activity)
+                            <li class="border-b pb-2 text-sm text-gray-700">
+                                <strong>{{ ucfirst($activity->action) }}</strong>
+                                {{ $activity->subject_type }}:
+                                {{ $activity->description }}
+                                <span class="text-gray-400 text-xs">
+                                    ({{ $activity->created_at->diffForHumans() }})
+                                </span>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
             </div>
 
         </div>
