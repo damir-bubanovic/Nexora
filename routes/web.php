@@ -61,6 +61,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/projects/{project}/tasks/{task}/bugs', [BugController::class, 'index'])->name('projects.tasks.bugs.index');
     Route::get('/projects/{project}/tasks/{task}/bugs/create', [BugController::class, 'create'])->name('projects.tasks.bugs.create');
     Route::post('/projects/{project}/tasks/{task}/bugs', [BugController::class, 'store'])->name('projects.tasks.bugs.store');
+    Route::get('/projects/{project}/tasks/{task}/bugs/{bug}/edit', [BugController::class, 'edit'])
+    ->name('projects.tasks.bugs.edit');
+
+    Route::put('/projects/{project}/tasks/{task}/bugs/{bug}', [BugController::class, 'update'])
+        ->name('projects.tasks.bugs.update');
+
+    Route::delete('/projects/{project}/tasks/{task}/bugs/{bug}', [BugController::class, 'destroy'])
+        ->name('projects.tasks.bugs.destroy');
+
+    
 });
 
 require __DIR__ . '/auth.php';

@@ -29,6 +29,7 @@
                         <th class="px-3 py-2 border text-left">Status</th>
                         <th class="px-3 py-2 border text-left">Assigned</th>
                         <th class="px-3 py-2 border text-left">Description</th>
+                        <th class="px-3 py-2 border text-left">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,6 +50,31 @@
                             <td class="px-3 py-2 border">
                                 {{ $bug->description }}
                             </td>
+
+                            <td class="px-3 py-2 border">
+                                <div class="flex gap-3">
+                                    @auth
+                                        @if(auth()->user()->isAdmin() || $bug->assigned_to === auth()->id())
+                                            <a href="{{ route('projects.tasks.bugs.edit', [$project, $task, $bug]) }}"
+                                               class="text-blue-600 text-sm">
+                                                Edit
+                                            </a>
+
+                                            <form method="POST"
+                                                  action="{{ route('projects.tasks.bugs.destroy', [$project, $task, $bug]) }}"
+                                                  onsubmit="return confirm('Delete this bug?');">
+                                                @csrf
+                                                @method('DELETE')
+
+                                                <button class="text-red-600 text-sm">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        @endif
+                                    @endauth
+                                </div>
+                            </td>
+
                         </tr>
                     @endforeach
                 </tbody>
