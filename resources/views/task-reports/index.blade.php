@@ -12,7 +12,7 @@
                 </a>
 
                 <a href="{{ route('projects.tasks.reports.download', [$project, $task]) }}"
-                   class="inline-flex items-center bg-white text-gray-800 border border-gray-300 px-4 py-2 rounded text-sm hover:bg-gray-100">
+                   class="bg-green-800 text-white px-4 py-2 rounded text-sm hover:bg-green-700">
                     Download .md
                 </a>
 
