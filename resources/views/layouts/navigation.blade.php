@@ -34,6 +34,11 @@
                             </x-nav-link>
                         @endif
                     @endauth
+                    @if(auth()->user()?->isAdmin())
+                        <x-nav-link :href="route('activity-logs.index')" :active="request()->routeIs('activity-logs.*')">
+                            Activity Logs
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 

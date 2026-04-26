@@ -8,6 +8,7 @@ use App\Http\Controllers\TaskReportController;
 use App\Http\Controllers\TaskReportRevisionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ActivityLogController;
 use App\Models\Bug;
 use Illuminate\Support\Facades\Route;
 
@@ -60,6 +61,9 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/projects/{project}/tasks/{task}/bugs/{bug}', [BugController::class, 'destroy'])
         ->name('projects.tasks.bugs.destroy');
+
+    Route::get('/activity-logs', [ActivityLogController::class, 'index'])
+        ->name('activity-logs.index');
 
     
 });
