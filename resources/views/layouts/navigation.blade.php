@@ -27,6 +27,9 @@
                     <x-nav-link :href="route('projects.create')" :active="request()->routeIs('projects.create')">
                         {{ __('Create Project') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('work-summary.index')" :active="request()->routeIs('work-summary.*')">
+                        Work Summary
+                    </x-nav-link>
                     @auth
                         @if(auth()->user()->isAdmin())
                             <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">

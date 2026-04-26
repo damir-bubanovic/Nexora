@@ -9,6 +9,7 @@ use App\Http\Controllers\TaskReportRevisionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\WorkSummaryController;
 use App\Models\Bug;
 use Illuminate\Support\Facades\Route;
 
@@ -64,6 +65,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/activity-logs', [ActivityLogController::class, 'index'])
         ->name('activity-logs.index');
+
+    Route::get('/work-summary', [WorkSummaryController::class, 'index'])
+    ->name('work-summary.index');
 
     
 });
