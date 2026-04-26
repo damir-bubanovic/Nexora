@@ -50,6 +50,23 @@
                 class="w-full border rounded p-2"
             >
 
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Estimated Hours</label>
+                <input type="number" step="0.1" name="estimated_hours" class="mt-1 w-full rounded border-gray-300">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Actual Hours</label>
+                <input type="number" step="0.1" name="actual_hours" class="mt-1 w-full rounded border-gray-300">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Agreed Cost</label>
+                <input type="number" step="0.01" name="agreed_cost" class="mt-1 w-full rounded border-gray-300">
+            </div>
+            
+
             <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                 Save Task
             </button>

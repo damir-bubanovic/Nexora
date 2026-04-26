@@ -20,6 +20,9 @@ class UpdateTaskRequest extends FormRequest
             'priority' => ['sometimes', 'integer'],
             'due_date' => ['nullable', 'date'],
             'assigned_to' => ['nullable', 'exists:users,id'],
+            'estimated_hours' => ['sometimes', 'nullable', 'numeric', 'min:0'],
+            'actual_hours' => ['sometimes', 'nullable', 'numeric', 'min:0'],
+            'agreed_cost' => ['sometimes', 'nullable', 'numeric', 'min:0'],
         ];
     }
 }

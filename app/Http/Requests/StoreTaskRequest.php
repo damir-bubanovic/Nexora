@@ -20,6 +20,9 @@ class StoreTaskRequest extends FormRequest
             'priority' => ['required', 'integer'],
             'due_date' => ['nullable', 'date'],
             'assigned_to' => ['nullable', 'exists:users,id'],
+            'estimated_hours' => ['nullable', 'numeric', 'min:0'],
+            'actual_hours' => ['nullable', 'numeric', 'min:0'],
+            'agreed_cost' => ['nullable', 'numeric', 'min:0'],
         ];
     }
 }

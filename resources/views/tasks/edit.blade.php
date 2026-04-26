@@ -49,6 +49,10 @@
                 class="w-full border rounded p-2"
             >
 
+            <input type="number" step="0.1" name="estimated_hours" value="{{ $task->estimated_hours }}">
+            <input type="number" step="0.1" name="actual_hours" value="{{ $task->actual_hours }}">
+            <input type="number" step="0.01" name="agreed_cost" value="{{ $task->agreed_cost }}">
+
             <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                 Update Task
             </button>

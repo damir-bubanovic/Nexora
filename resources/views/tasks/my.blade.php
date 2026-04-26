@@ -10,7 +10,7 @@
             <p class="text-gray-600">No tasks assigned to you.</p>
         @else
             <div class="overflow-x-auto">
-                <table class="min-w-full border border-gray-200">
+                <table class="min-w-full border border-gray-200 text-sm">
                     <thead class="bg-gray-100">
                         <tr>
                             <th class="border px-3 py-2 text-left">Title</th>
@@ -18,6 +18,9 @@
                             <th class="border px-3 py-2 text-left">Status</th>
                             <th class="border px-3 py-2 text-left">Priority</th>
                             <th class="border px-3 py-2 text-left">Due</th>
+                            <th class="border px-3 py-2 text-left">Est. Hours</th>
+                            <th class="border px-3 py-2 text-left">Actual Hours</th>
+                            <th class="border px-3 py-2 text-left">Cost</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -46,6 +49,18 @@
 
                                 <td class="border px-3 py-2">
                                     {{ $task->due_date ?: '—' }}
+                                </td>
+
+                                <td class="border px-3 py-2">
+                                    {{ $task->estimated_hours !== null ? number_format($task->estimated_hours, 1) . 'h' : '—' }}
+                                </td>
+
+                                <td class="border px-3 py-2">
+                                    {{ $task->actual_hours !== null ? number_format($task->actual_hours, 1) . 'h' : '—' }}
+                                </td>
+
+                                <td class="border px-3 py-2">
+                                    {{ $task->agreed_cost !== null ? number_format($task->agreed_cost, 2) . ' €' : '—' }}
                                 </td>
                             </tr>
                         @endforeach

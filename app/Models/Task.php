@@ -17,6 +17,9 @@ class Task extends Model
         'priority',
         'due_date',
         'assigned_to',
+        'estimated_hours',
+        'actual_hours',
+        'agreed_cost',
         'created_by',
     ];
 
