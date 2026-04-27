@@ -29,6 +29,10 @@
         <main>
             {{ $slot }}
         </main>
+
+        <footer class="bg-black text-white text-center text-sm py-4 mt-10">
+            © 2026, Damir Bubanović
+        </footer>
     </div>
 </body>
 </html>

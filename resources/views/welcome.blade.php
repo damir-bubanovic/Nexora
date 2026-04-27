@@ -128,10 +128,8 @@
             </section>
         </main>
 
-        <footer class="border-t border-gray-200 bg-white">
-            <div class="max-w-7xl mx-auto px-6 py-5 text-sm text-gray-500">
-                Nexora — project workflow and reporting system.
-            </div>
+        <footer class="bg-black text-white text-center text-sm py-4 mt-10">
+            © 2026, Damir Bubanović
         </footer>
 
     </div>
