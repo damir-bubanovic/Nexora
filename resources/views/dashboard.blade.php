@@ -1,140 +1,195 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Nexora Dashboard') }}
-        </h2>
+        <div class="border-b border-gray-200 pb-4">
+            <p class="text-xs uppercase tracking-[0.3em] text-gray-500">Nexora</p>
+            <h2 class="mt-2 text-3xl font-black text-gray-950">
+                Dashboard
+            </h2>
+        </div>
     </x-slot>
 
-    <div class="py-8">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+    <div class="py-10 bg-gray-50 min-h-screen">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <h3 class="text-lg font-semibold mb-2">Welcome to Nexora</h3>
-                    <p class="text-sm text-gray-600">
-                        Overview of projects, tasks, reports, bugs, and current workload.
+            <!-- Intro -->
+            <section class="bg-white border border-gray-200 p-8">
+                <div class="max-w-3xl">
+                    <p class="text-sm font-semibold uppercase tracking-widest text-gray-500">
+                        Project control center
+                    </p>
+
+                    <h1 class="mt-3 text-4xl font-black text-gray-950">
+                        Welcome to Nexora
+                    </h1>
+
+                    <p class="mt-4 text-gray-600 leading-relaxed">
+                        Monitor projects, tasks, bugs, reports, and team activity from one focused workspace.
                     </p>
                 </div>
-            </div>
+            </section>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white shadow-sm sm:rounded-lg p-6">
-                    <h3 class="text-sm font-medium text-gray-500">Total Projects</h3>
-                    <p class="mt-2 text-3xl font-bold text-gray-900">{{ $totalProjects }}</p>
+            <!-- Stats -->
+            <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div class="bg-white border border-gray-200 p-6">
+                    <p class="text-xs uppercase tracking-widest text-gray-500">Projects</p>
+                    <p class="mt-4 text-5xl font-black text-gray-950">{{ $totalProjects }}</p>
+                    <p class="mt-2 text-sm text-gray-500">Total projects</p>
                 </div>
 
-                <div class="bg-white shadow-sm sm:rounded-lg p-6">
-                    <h3 class="text-sm font-medium text-gray-500">Active Projects</h3>
-                    <p class="mt-2 text-3xl font-bold text-green-600">{{ $activeProjects }}</p>
+                <div class="bg-white border border-gray-200 p-6">
+                    <p class="text-xs uppercase tracking-widest text-gray-500">Active</p>
+                    <p class="mt-4 text-5xl font-black text-gray-950">{{ $activeProjects }}</p>
+                    <p class="mt-2 text-sm text-gray-500">Active projects</p>
                 </div>
 
-                <div class="bg-white shadow-sm sm:rounded-lg p-6">
-                    <h3 class="text-sm font-medium text-gray-500">Total Tasks</h3>
-                    <p class="mt-2 text-3xl font-bold text-gray-900">{{ $totalTasks }}</p>
+                <div class="bg-white border border-gray-200 p-6">
+                    <p class="text-xs uppercase tracking-widest text-gray-500">Tasks</p>
+                    <p class="mt-4 text-5xl font-black text-gray-950">{{ $totalTasks }}</p>
+                    <p class="mt-2 text-sm text-gray-500">Total tasks</p>
                 </div>
 
-                <div class="bg-white shadow-sm sm:rounded-lg p-6">
-                    <h3 class="text-sm font-medium text-gray-500">Pending Tasks</h3>
-                    <p class="mt-2 text-3xl font-bold text-yellow-600">{{ $pendingTasks }}</p>
+                <!-- Highlight: Pending -->
+                <div class="bg-gray-950 border border-gray-950 p-6">
+                    <p class="text-xs uppercase tracking-widest text-gray-400">Needs attention</p>
+                    <p class="mt-4 text-5xl font-black text-white">{{ $pendingTasks }}</p>
+                    <p class="mt-2 text-sm text-gray-400">Pending tasks</p>
                 </div>
 
-                <div class="bg-white shadow-sm sm:rounded-lg p-6">
-                    <h3 class="text-sm font-medium text-gray-500">Completed Tasks</h3>
-                    <p class="mt-2 text-3xl font-bold text-blue-600">{{ $completedTasks }}</p>
+                <div class="bg-white border border-gray-200 p-6">
+                    <p class="text-xs uppercase tracking-widest text-gray-500">Completed</p>
+                    <p class="mt-4 text-5xl font-black text-gray-950">{{ $completedTasks }}</p>
+                    <p class="mt-2 text-sm text-gray-500">Completed tasks</p>
                 </div>
 
-                <div class="bg-white shadow-sm sm:rounded-lg p-6">
-                    <h3 class="text-sm font-medium text-gray-500">Total Reports</h3>
-                    <p class="mt-2 text-3xl font-bold text-gray-900">{{ $totalReports }}</p>
+                <div class="bg-white border border-gray-200 p-6">
+                    <p class="text-xs uppercase tracking-widest text-gray-500">Reports</p>
+                    <p class="mt-4 text-5xl font-black text-gray-950">{{ $totalReports }}</p>
+                    <p class="mt-2 text-sm text-gray-500">Task reports</p>
                 </div>
-            </div>
+            </section>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div class="bg-white p-4 rounded shadow">
-                    <h3 class="text-sm text-gray-500">Total Bugs</h3>
-                    <p class="text-2xl font-bold">{{ $totalBugs }}</p>
-                </div>
+            <!-- Bugs + Workload -->
+            <section class="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
-                <div class="bg-white p-4 rounded shadow">
-                    <h3 class="text-sm text-gray-500">Open Bugs</h3>
-                    <p class="text-2xl font-bold text-red-600">{{ $openBugs }}</p>
-                </div>
+                <!-- Highlight: Bugs -->
+                <div class="lg:col-span-2 bg-gray-950 border border-gray-950 p-6">
+                    <div class="mb-6">
+                        <p class="text-xs uppercase tracking-widest text-gray-400">Needs review</p>
+                        <h3 class="mt-2 text-2xl font-black text-white">Bug Overview</h3>
+                        <p class="mt-2 text-sm text-gray-400">
+                            Open and in-progress bugs should be reviewed regularly.
+                        </p>
+                    </div>
 
-                <div class="bg-white p-4 rounded shadow">
-                    <h3 class="text-sm text-gray-500">In Progress Bugs</h3>
-                    <p class="text-2xl font-bold text-yellow-600">{{ $inProgressBugs }}</p>
-                </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="border border-gray-700 p-4">
+                            <p class="text-3xl font-black text-white">{{ $totalBugs }}</p>
+                            <p class="mt-1 text-sm text-gray-400">Total</p>
+                        </div>
 
-                <div class="bg-white p-4 rounded shadow">
-                    <h3 class="text-sm text-gray-500">Resolved Bugs</h3>
-                    <p class="text-2xl font-bold text-green-600">{{ $resolvedBugs }}</p>
-                </div>
-            </div>
+                        <div class="border border-gray-700 p-4">
+                            <p class="text-3xl font-black text-white">{{ $openBugs }}</p>
+                            <p class="mt-1 text-sm text-gray-400">Open</p>
+                        </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="bg-white p-4 rounded shadow">
-                    <h3 class="text-sm text-gray-500">My Tasks</h3>
-                    <p class="text-2xl font-bold">{{ $myTasksCount }}</p>
-                </div>
+                        <div class="border border-gray-700 p-4">
+                            <p class="text-3xl font-black text-white">{{ $inProgressBugs }}</p>
+                            <p class="mt-1 text-sm text-gray-400">In progress</p>
+                        </div>
 
-                <div class="bg-white p-4 rounded shadow">
-                    <h3 class="text-sm text-gray-500">My Open Bugs</h3>
-                    <p class="text-2xl font-bold text-red-600">{{ $myOpenBugs }}</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white shadow-sm sm:rounded-lg p-6">
-                    <h3 class="text-lg font-semibold mb-2">Projects</h3>
-                    <p class="text-sm text-gray-600 mb-4">
-                        Manage and review all projects.
-                    </p>
-                    <a href="{{ route('projects.index') }}" class="text-blue-600 hover:underline text-sm">
-                        View Projects →
-                    </a>
+                        <div class="border border-gray-700 p-4">
+                            <p class="text-3xl font-black text-white">{{ $resolvedBugs }}</p>
+                            <p class="mt-1 text-sm text-gray-400">Resolved</p>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="bg-white shadow-sm sm:rounded-lg p-6">
-                    <h3 class="text-lg font-semibold mb-2">Tasks</h3>
-                    <p class="text-sm text-gray-600 mb-4">
-                        Review your assigned work.
-                    </p>
-                    <a href="{{ route('tasks.my') }}" class="text-blue-600 hover:underline text-sm">
-                        View My Tasks →
-                    </a>
-                </div>
+                <!-- My Work -->
+                <div class="bg-white border border-gray-200 p-6">
+                    <p class="text-xs uppercase tracking-widest text-gray-500">My workload</p>
+                    <h3 class="mt-2 text-2xl font-black text-gray-950">Assigned Work</h3>
 
-                <div class="bg-white shadow-sm sm:rounded-lg p-6">
-                    <h3 class="text-lg font-semibold mb-2">Reports</h3>
-                    <p class="text-sm text-gray-600 mb-4">
-                        Track work summaries, file changes, and SQL notes.
-                    </p>
-                    <a href="{{ route('projects.index') }}" class="text-blue-600 hover:underline text-sm">
-                        Browse Work →
-                    </a>
-                </div>
-            </div>
+                    <div class="mt-6 space-y-4">
+                        <div class="border border-gray-200 p-4">
+                            <p class="text-4xl font-black text-gray-950">{{ $myTasksCount }}</p>
+                            <p class="mt-1 text-sm text-gray-500">My tasks</p>
+                        </div>
 
-            <div class="bg-white shadow-sm sm:rounded-lg p-6">
-                <h3 class="text-lg font-semibold mb-4">Recent Activity</h3>
+                        <div class="border border-gray-200 p-4">
+                            <p class="text-4xl font-black text-gray-950">{{ $myOpenBugs }}</p>
+                            <p class="mt-1 text-sm text-gray-500">My open bugs</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Navigation -->
+            <section class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <a href="{{ route('projects.index') }}" class="block bg-white border border-gray-200 p-6 hover:border-gray-950 transition">
+                    <p class="text-xs uppercase tracking-widest text-gray-500">Projects</p>
+                    <h3 class="mt-3 text-2xl font-black text-gray-950">View Projects</h3>
+                    <p class="mt-3 text-sm text-gray-600">Manage project scope and tasks.</p>
+                    <p class="mt-6 text-sm font-bold text-gray-950">Open →</p>
+                </a>
+
+                <a href="{{ route('tasks.my') }}" class="block bg-white border border-gray-200 p-6 hover:border-gray-950 transition">
+                    <p class="text-xs uppercase tracking-widest text-gray-500">Tasks</p>
+                    <h3 class="mt-3 text-2xl font-black text-gray-950">My Tasks</h3>
+                    <p class="mt-3 text-sm text-gray-600">Track your assigned work and deadlines.</p>
+                    <p class="mt-6 text-sm font-bold text-gray-950">Open →</p>
+                </a>
+
+                <a href="{{ route('work-summary.index') }}" class="block bg-white border border-gray-200 p-6 hover:border-gray-950 transition">
+                    <p class="text-xs uppercase tracking-widest text-gray-500">Summary</p>
+                    <h3 class="mt-3 text-2xl font-black text-gray-950">Work Summary</h3>
+                    <p class="mt-3 text-sm text-gray-600">View monthly productivity insights.</p>
+                    <p class="mt-6 text-sm font-bold text-gray-950">Open →</p>
+                </a>
+            </section>
+
+            <!-- Highlight: Activity -->
+            <section class="bg-white border-2 border-gray-950 p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <p class="text-xs uppercase tracking-widest text-gray-500">Latest system movement</p>
+                        <h3 class="mt-2 text-2xl font-black text-gray-950">Recent Activity</h3>
+                    </div>
+
+                    @if(auth()->user()?->isAdmin())
+                        <a href="{{ route('activity-logs.index') }}"
+                           class="border border-gray-950 px-4 py-2 text-sm font-bold text-gray-950 hover:bg-gray-950 hover:text-white transition">
+                            View All
+                        </a>
+                    @endif
+                </div>
 
                 @if($recentActivities->isEmpty())
-                    <p class="text-sm text-gray-600">No activity yet.</p>
+                    <div class="border border-dashed border-gray-300 p-8 text-center text-gray-500">
+                        No activity yet.
+                    </div>
                 @else
-                    <ul class="space-y-3">
+                    <div class="divide-y divide-gray-200">
                         @foreach($recentActivities as $activity)
-                            <li class="border-b pb-2 text-sm text-gray-700">
-                                <strong>{{ ucfirst($activity->action) }}</strong>
-                                {{ $activity->subject_type }}:
-                                {{ $activity->description }}
-                                <span class="text-gray-400 text-xs">
-                                    ({{ $activity->created_at->diffForHumans() }})
-                                </span>
-                            </li>
+                            <div class="py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                                <div>
+                                    <p class="text-sm text-gray-950">
+                                        <span class="font-black uppercase">{{ $activity->action }}</span>
+                                        <span class="text-gray-500">{{ $activity->subject_type }}</span>
+                                    </p>
+
+                                    <p class="mt-1 text-sm text-gray-600">
+                                        {{ $activity->description }}
+                                    </p>
+                                </div>
+
+                                <p class="text-xs text-gray-400 whitespace-nowrap">
+                                    {{ $activity->created_at->diffForHumans() }}
+                                </p>
+                            </div>
                         @endforeach
-                    </ul>
+                    </div>
                 @endif
-            </div>
+            </section>
 
         </div>
     </div>

@@ -1,72 +1,91 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800">
-            My Tasks
-        </h2>
+        <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-gray-500">Tasks</p>
+            <h2 class="mt-2 text-3xl font-black text-gray-950">
+                My Tasks
+            </h2>
+        </div>
     </x-slot>
 
-    <div class="p-6">
-        @if($tasks->isEmpty())
-            <p class="text-gray-600">No tasks assigned to you.</p>
-        @else
-            <div class="overflow-x-auto">
-                <table class="min-w-full border border-gray-200 text-sm">
-                    <thead class="bg-gray-100">
-                        <tr>
-                            <th class="border px-3 py-2 text-left">Title</th>
-                            <th class="border px-3 py-2 text-left">Project</th>
-                            <th class="border px-3 py-2 text-left">Status</th>
-                            <th class="border px-3 py-2 text-left">Priority</th>
-                            <th class="border px-3 py-2 text-left">Due</th>
-                            <th class="border px-3 py-2 text-left">Est. Hours</th>
-                            <th class="border px-3 py-2 text-left">Actual Hours</th>
-                            <th class="border px-3 py-2 text-left">Cost</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($tasks as $task)
-                            <tr>
-                                <td class="border px-3 py-2">{{ $task->title }}</td>
+    <div class="py-10 bg-gray-50 min-h-screen">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-                                <td class="border px-3 py-2">
-                                    {{ $task->project?->name }}
-                                </td>
+            <section class="bg-white border-2 border-gray-950">
+                <div class="p-6">
+                    @if($tasks->isEmpty())
+                        <div class="border border-dashed border-gray-300 p-10 text-center">
+                            <p class="text-sm text-gray-500">No tasks assigned to you.</p>
+                        </div>
+                    @else
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full text-sm">
+                                <thead>
+                                    <tr class="text-left text-xs uppercase tracking-widest text-gray-500 border-b border-gray-200">
+                                        <th class="py-3 pr-4">Title</th>
+                                        <th class="py-3 pr-4">Project</th>
+                                        <th class="py-3 pr-4">Status</th>
+                                        <th class="py-3 pr-4">Priority</th>
+                                        <th class="py-3 pr-4">Due</th>
+                                        <th class="py-3 pr-4">Est.</th>
+                                        <th class="py-3 pr-4">Actual</th>
+                                        <th class="py-3 pr-4">Cost</th>
+                                    </tr>
+                                </thead>
 
-                                <td class="border px-3 py-2">
-                                    <x-status-badge :status="$task->status" />
-                                </td>
+                                <tbody class="divide-y divide-gray-100">
+                                    @foreach($tasks as $task)
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="py-3 pr-4 font-semibold text-gray-950">
+                                                {{ $task->title }}
+                                            </td>
 
-                                <td class="border px-3 py-2">
-                                    <span class="px-2 py-1 rounded text-xs font-semibold
-                                        @if($task->priority >= 8) bg-red-100 text-red-800
-                                        @elseif($task->priority >= 5) bg-yellow-100 text-yellow-800
-                                        @else bg-gray-100 text-gray-800
-                                        @endif
-                                    ">
-                                        {{ $task->priority }}
-                                    </span>
-                                </td>
+                                            <td class="py-3 pr-4 text-gray-700">
+                                                {{ $task->project?->name ?? '—' }}
+                                            </td>
 
-                                <td class="border px-3 py-2">
-                                    {{ $task->due_date ?: '—' }}
-                                </td>
+                                            <td class="py-3 pr-4">
+                                                <x-status-badge :status="$task->status" />
+                                            </td>
 
-                                <td class="border px-3 py-2">
-                                    {{ $task->estimated_hours !== null ? number_format($task->estimated_hours, 1) . 'h' : '—' }}
-                                </td>
+                                            <td class="py-3 pr-4">
+                                                @php
+                                                    $priorityClass = match (true) {
+                                                        $task->priority >= 8 => 'border-red-600 text-red-600',
+                                                        $task->priority >= 5 => 'border-gray-950 text-gray-950',
+                                                        default => 'border-gray-300 text-gray-600',
+                                                    };
+                                                @endphp
 
-                                <td class="border px-3 py-2">
-                                    {{ $task->actual_hours !== null ? number_format($task->actual_hours, 1) . 'h' : '—' }}
-                                </td>
+                                                <span class="inline-flex border px-2 py-1 text-xs font-bold {{ $priorityClass }}">
+                                                    {{ $task->priority }}
+                                                </span>
+                                            </td>
 
-                                <td class="border px-3 py-2">
-                                    {{ $task->agreed_cost !== null ? number_format($task->agreed_cost, 2) . ' €' : '—' }}
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endif
+                                            <td class="py-3 pr-4 text-gray-600">
+                                                {{ $task->due_date ?: '—' }}
+                                            </td>
+
+                                            <td class="py-3 pr-4 text-gray-600">
+                                                {{ $task->estimated_hours !== null ? number_format($task->estimated_hours, 1) . 'h' : '—' }}
+                                            </td>
+
+                                            <td class="py-3 pr-4 text-gray-600">
+                                                {{ $task->actual_hours !== null ? number_format($task->actual_hours, 1) . 'h' : '—' }}
+                                            </td>
+
+                                            <td class="py-3 pr-4 text-gray-600">
+                                                {{ $task->agreed_cost !== null ? number_format($task->agreed_cost, 2) . ' €' : '—' }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
+                </div>
+            </section>
+
+        </div>
     </div>
 </x-app-layout>

@@ -1,137 +1,148 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800">
-                Tasks for {{ $project->name }}
-            </h2>
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-xs uppercase tracking-[0.3em] text-gray-500">Tasks</p>
+                <h2 class="mt-2 text-3xl font-black text-gray-950">
+                    {{ $project->name }}
+                </h2>
+            </div>
 
             <a href="{{ route('projects.tasks.create', $project) }}"
-               class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">
+               class="bg-gray-950 text-white px-4 py-2 text-sm font-bold hover:bg-gray-800 transition">
                 New Task
             </a>
         </div>
     </x-slot>
 
-    <div class="p-6">
-        @if(session('success'))
-            <div class="mb-4 bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded">
-                {{ session('success') }}
-            </div>
-        @endif
+    <div class="py-10 bg-gray-50 min-h-screen">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-        @if($tasks->isEmpty())
-            <p class="text-gray-600">No tasks yet.</p>
-        @else
-            <div class="overflow-x-auto">
-                <table class="min-w-full border border-gray-200 text-sm">
-                    <thead class="bg-gray-100">
-                        <tr>
-                            <th class="border px-3 py-2 text-left">Title</th>
-                            <th class="border px-3 py-2 text-left">Status</th>
-                            <th class="border px-3 py-2 text-left">Assigned</th>
-                            <th class="border px-3 py-2 text-left">Priority</th>
-                            <th class="border px-3 py-2 text-left">Due</th>
-                            <th class="border px-3 py-2 text-left">Est. Hours</th>
-                            <th class="border px-3 py-2 text-left">Actual Hours</th>
-                            <th class="border px-3 py-2 text-left">Cost</th>
-                            <th class="border px-3 py-2 text-left">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($tasks as $task)
-                            <tr>
-                                <td class="border px-3 py-2">{{ $task->title }}</td>
+            @if(session('success'))
+                <div class="bg-white border-2 border-gray-950 px-4 py-3 text-sm font-semibold text-gray-950">
+                    {{ session('success') }}
+                </div>
+            @endif
 
-                                <td class="border px-3 py-2">
-                                    <form method="POST" action="{{ route('projects.tasks.update', [$project, $task]) }}">
-                                        @csrf
-                                        @method('PUT')
+            <section class="bg-white border-2 border-gray-950">
+                <div class="p-6">
+                    @if($tasks->isEmpty())
+                        <div class="border border-dashed border-gray-300 p-10 text-center">
+                            <p class="text-sm text-gray-500">No tasks yet.</p>
+                        </div>
+                    @else
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full text-sm">
+                                <thead>
+                                    <tr class="text-left text-xs uppercase tracking-widest text-gray-500 border-b border-gray-200">
+                                        <th class="py-3 pr-4">Title</th>
+                                        <th class="py-3 pr-4">Status</th>
+                                        <th class="py-3 pr-4">Assigned</th>
+                                        <th class="py-3 pr-4">Priority</th>
+                                        <th class="py-3 pr-4">Due</th>
+                                        <th class="py-3 pr-4">Est.</th>
+                                        <th class="py-3 pr-4">Actual</th>
+                                        <th class="py-3 pr-4">Cost</th>
+                                        <th class="py-3 pr-4">Actions</th>
+                                    </tr>
+                                </thead>
 
-                                        <select name="status" onchange="this.form.submit()"
-                                                class="text-xs border rounded p-1">
+                                <tbody class="divide-y divide-gray-100">
+                                    @foreach($tasks as $task)
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="py-3 pr-4 font-semibold text-gray-950">
+                                                {{ $task->title }}
+                                            </td>
 
-                                            <option value="pending" {{ $task->status === 'pending' ? 'selected' : '' }}>Pending</option>
-                                            <option value="active" {{ $task->status === 'active' ? 'selected' : '' }}>Active</option>
-                                            <option value="completed" {{ $task->status === 'completed' ? 'selected' : '' }}>Completed</option>
-
-                                        </select>
-                                    </form>
-                                </td>
-
-                                <td class="border px-3 py-2">
-                                    {{ $task->assignee?->name ?? '—' }}
-                                </td>
-
-                                <td class="border px-3 py-2">
-                                    @php
-                                        $priorityClass = match (true) {
-                                            $task->priority >= 8 => 'bg-red-100 text-red-800',
-                                            $task->priority >= 5 => 'bg-yellow-100 text-yellow-800',
-                                            default => 'bg-gray-100 text-gray-800',
-                                        };
-                                    @endphp
-
-                                    <span class="inline-flex px-2 py-1 rounded text-xs font-semibold {{ $priorityClass }}">
-                                        {{ $task->priority }}
-                                    </span>
-                                </td>
-
-                                <td class="border px-3 py-2">
-                                    {{ $task->due_date ?: '—' }}
-                                </td>
-
-                                <td class="border px-3 py-2">
-                                    {{ $task->estimated_hours !== null ? number_format($task->estimated_hours, 1) . 'h' : '—' }}
-                                </td>
-
-                                <td class="border px-3 py-2">
-                                    {{ $task->actual_hours !== null ? number_format($task->actual_hours, 1) . 'h' : '—' }}
-                                </td>
-
-                                <td class="border px-3 py-2">
-                                    {{ $task->agreed_cost !== null ? number_format($task->agreed_cost, 2) . ' €' : '—' }}
-                                </td>
-
-                                <td class="border px-3 py-2">
-                                    <div class="flex items-center gap-3">
-
-                                        <a href="{{ route('projects.tasks.bugs.index', [$project, $task]) }}"
-                                           class="text-red-600 hover:underline text-sm">
-                                            Bugs
-                                        </a>
-
-                                        <a href="{{ route('projects.tasks.reports.index', [$project, $task]) }}"
-                                           class="text-gray-700 hover:underline text-sm">
-                                            Reports
-                                        </a>
-
-                                        @auth
-                                            @if(auth()->user()->isAdmin() || $task->assigned_to === auth()->id())
-                                                <a href="{{ route('projects.tasks.edit', [$project, $task]) }}"
-                                                   class="text-blue-600 hover:underline text-sm">
-                                                    Edit
-                                                </a>
-
-                                                <form method="POST"
-                                                      action="{{ route('projects.tasks.destroy', [$project, $task]) }}"
-                                                      onsubmit="return confirm('Delete this task?');">
+                                            <td class="py-3 pr-4">
+                                                <form method="POST" action="{{ route('projects.tasks.update', [$project, $task]) }}">
                                                     @csrf
-                                                    @method('DELETE')
-                                                    <button class="text-red-600 hover:underline text-sm">
-                                                        Delete
-                                                    </button>
+                                                    @method('PUT')
+
+                                                    <select name="status"
+                                                            onchange="this.form.submit()"
+                                                            class="border border-gray-300 px-2 py-1 text-xs focus:border-gray-950 focus:ring-gray-950">
+                                                        <option value="pending" {{ $task->status === 'pending' ? 'selected' : '' }}>Pending</option>
+                                                        <option value="active" {{ $task->status === 'active' ? 'selected' : '' }}>Active</option>
+                                                        <option value="completed" {{ $task->status === 'completed' ? 'selected' : '' }}>Completed</option>
+                                                    </select>
                                                 </form>
-                                            @endif
-                                        @endauth
+                                            </td>
 
-                                    </div>
-                                </td>
+                                            <td class="py-3 pr-4 text-gray-700">
+                                                {{ $task->assignee?->name ?? '—' }}
+                                            </td>
 
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endif
+                                            <td class="py-3 pr-4">
+                                                @php
+                                                    $priorityClass = match (true) {
+                                                        $task->priority >= 8 => 'border-red-600 text-red-600',
+                                                        $task->priority >= 5 => 'border-gray-950 text-gray-950',
+                                                        default => 'border-gray-300 text-gray-600',
+                                                    };
+                                                @endphp
+
+                                                <span class="inline-flex border px-2 py-1 text-xs font-bold {{ $priorityClass }}">
+                                                    {{ $task->priority }}
+                                                </span>
+                                            </td>
+
+                                            <td class="py-3 pr-4 text-gray-600">
+                                                {{ $task->due_date ?: '—' }}
+                                            </td>
+
+                                            <td class="py-3 pr-4 text-gray-600">
+                                                {{ $task->estimated_hours !== null ? number_format($task->estimated_hours, 1) . 'h' : '—' }}
+                                            </td>
+
+                                            <td class="py-3 pr-4 text-gray-600">
+                                                {{ $task->actual_hours !== null ? number_format($task->actual_hours, 1) . 'h' : '—' }}
+                                            </td>
+
+                                            <td class="py-3 pr-4 text-gray-600">
+                                                {{ $task->agreed_cost !== null ? number_format($task->agreed_cost, 2) . ' €' : '—' }}
+                                            </td>
+
+                                            <td class="py-3 pr-4">
+                                                <div class="flex flex-wrap items-center gap-3">
+                                                    <a href="{{ route('projects.tasks.bugs.index', [$project, $task]) }}"
+                                                       class="text-sm font-bold text-gray-950 hover:underline">
+                                                        Bugs
+                                                    </a>
+
+                                                    <a href="{{ route('projects.tasks.reports.index', [$project, $task]) }}"
+                                                       class="text-sm font-bold text-gray-700 hover:underline">
+                                                        Reports
+                                                    </a>
+
+                                                    @if(auth()->user()?->isAdmin() || $task->assigned_to === auth()->id())
+                                                        <a href="{{ route('projects.tasks.edit', [$project, $task]) }}"
+                                                           class="text-sm font-bold text-gray-700 hover:underline">
+                                                            Edit
+                                                        </a>
+
+                                                        <form method="POST"
+                                                              action="{{ route('projects.tasks.destroy', [$project, $task]) }}"
+                                                              onsubmit="return confirm('Delete this task?');">
+                                                            @csrf
+                                                            @method('DELETE')
+
+                                                            <button class="text-sm font-bold text-red-600 hover:underline">
+                                                                Delete
+                                                            </button>
+                                                        </form>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
+                </div>
+            </section>
+
+        </div>
     </div>
 </x-app-layout>

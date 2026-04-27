@@ -1,117 +1,109 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Project Details') }}
-            </h2>
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-xs uppercase tracking-[0.3em] text-gray-500">Projects</p>
+                <h2 class="mt-2 text-3xl font-black text-gray-950">
+                    Project Details
+                </h2>
+            </div>
 
             <a href="{{ route('projects.index') }}"
-               class="text-sm text-gray-600 hover:underline">
-                Back to Projects
+               class="border border-gray-950 px-4 py-2 text-sm font-bold text-gray-950 hover:bg-gray-950 hover:text-white transition">
+                Back
             </a>
         </div>
     </x-slot>
 
-    <div class="py-8">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 space-y-6">
+    <div class="py-10 bg-gray-50 min-h-screen">
+        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-                    <!-- Name -->
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">Name</h3>
-                        <p class="mt-1 text-lg font-semibold text-gray-900">
-                            {{ $project->name }}
-                        </p>
+            <section class="bg-black border-2 border-white p-6">
+                <p class="text-xs uppercase tracking-widest text-white">Project</p>
+
+                <h1 class="mt-3 text-4xl font-black text-white">
+                    {{ $project->name }}
+                </h1>
+
+                <p class="mt-4 text-white leading-relaxed">
+                    {{ $project->description ?: 'No description provided.' }}
+                </p>
+            </section>
+
+            <section class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div class="bg-white border border-gray-200 p-5">
+                    <p class="text-xs uppercase tracking-widest text-gray-500">Status</p>
+                    <div class="mt-3">
+                        <x-status-badge :status="$project->status" />
                     </div>
-
-                    <!-- Description -->
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">Description</h3>
-                        <p class="mt-1 text-gray-700">
-                            {{ $project->description ?: 'No description provided.' }}
-                        </p>
-                    </div>
-
-                    <!-- Details -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-                        <!-- Status -->
-                        <div>
-                            <h3 class="text-sm font-medium text-gray-500">Status</h3>
-                            <p class="mt-1">
-                                <x-status-badge :status="$project->status" class="px-3 py-1 text-sm" />
-                            </p>
-                        </div>
-
-                        <!-- Start Date -->
-                        <div>
-                            <h3 class="text-sm font-medium text-gray-500">Start Date</h3>
-                            <p class="mt-1 text-gray-700">
-                                {{ $project->start_date ?: 'Not set' }}
-                            </p>
-                        </div>
-
-                        <!-- End Date -->
-                        <div>
-                            <h3 class="text-sm font-medium text-gray-500">End Date</h3>
-                            <p class="mt-1 text-gray-700">
-                                {{ $project->end_date ?: 'Not set' }}
-                            </p>
-                        </div>
-
-                        <!-- Assigned Users -->
-                        <div class="md:col-span-3">
-                            <h3 class="text-sm font-medium text-gray-500">Assigned Users</h3>
-
-                            <div class="mt-2 space-y-1">
-                                @forelse($project->users as $user)
-                                    <p class="text-gray-700 text-sm">
-                                        {{ $user->name }} ({{ $user->role }})
-                                    </p>
-                                @empty
-                                    <p class="text-gray-500 text-sm">
-                                        No users assigned.
-                                    </p>
-                                @endforelse
-                            </div>
-                        </div>
-
-
-
-                    </div>
-
-                    <!-- Actions -->
-                    <div class="pt-4 flex items-center gap-4">
-
-                        <a href="{{ route('projects.tasks.index', $project) }}"
-                           class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 text-sm">
-                            View Tasks
-                        </a>
-
-                        <a href="{{ route('projects.edit', $project) }}"
-                           class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
-                            Edit Project
-                        </a>
-
-                        @auth
-                            @if(auth()->user()->isAdmin())
-                                <form method="POST" action="{{ route('projects.destroy', $project) }}"
-                                      onsubmit="return confirm('Are you sure you want to delete this project?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                            class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 text-sm">
-                                        Delete Project
-                                    </button>
-                                </form>
-                            @endif
-                        @endauth
-
-                    </div>
-
                 </div>
-            </div>
+
+                <div class="bg-white border border-gray-200 p-5">
+                    <p class="text-xs uppercase tracking-widest text-gray-500">Start Date</p>
+                    <p class="mt-3 text-xl font-black text-gray-950">
+                        {{ $project->start_date ?: '—' }}
+                    </p>
+                </div>
+
+                <div class="bg-white border border-gray-200 p-5">
+                    <p class="text-xs uppercase tracking-widest text-gray-500">End Date</p>
+                    <p class="mt-3 text-xl font-black text-gray-950">
+                        {{ $project->end_date ?: '—' }}
+                    </p>
+                </div>
+            </section>
+
+            <section class="bg-white border-2 border-gray-950 p-6">
+                <p class="text-xs uppercase tracking-widest text-gray-500">Assigned Users</p>
+
+                <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                    @forelse($project->users as $user)
+                        <div class="border border-gray-200 p-4">
+                            <p class="font-black text-gray-950">
+                                {{ $user->name }}
+                            </p>
+                            <p class="mt-1 text-sm text-gray-500">
+                                {{ ucfirst($user->role) }}
+                            </p>
+                        </div>
+                    @empty
+                        <div class="border border-dashed border-gray-300 p-6 text-sm text-gray-500">
+                            No users assigned.
+                        </div>
+                    @endforelse
+                </div>
+            </section>
+
+            <section class="bg-white border-2 border-gray-950 p-6">
+                <p class="text-xs uppercase tracking-widest text-gray-500 mb-4">Actions</p>
+
+                <div class="flex flex-wrap items-center gap-3">
+                    <a href="{{ route('projects.tasks.index', $project) }}"
+                       class="bg-gray-950 text-white px-4 py-2 text-sm font-bold hover:bg-gray-800 transition">
+                        View Tasks
+                    </a>
+
+                    <a href="{{ route('projects.edit', $project) }}"
+                       class="border border-gray-950 px-4 py-2 text-sm font-bold text-gray-950 hover:bg-gray-950 hover:text-white transition">
+                        Edit Project
+                    </a>
+
+                    @if(auth()->user()?->isAdmin())
+                        <form method="POST"
+                              action="{{ route('projects.destroy', $project) }}"
+                              onsubmit="return confirm('Are you sure you want to delete this project?');">
+                            @csrf
+                            @method('DELETE')
+
+                            <button type="submit"
+                                    class="border border-red-600 px-4 py-2 text-sm font-bold text-red-600 hover:bg-red-600 hover:text-white transition">
+                                Delete Project
+                            </button>
+                        </form>
+                    @endif
+                </div>
+            </section>
+
         </div>
     </div>
 </x-app-layout>
