@@ -32,10 +32,10 @@
             {{ $slot }}
         </div>
 
-        <footer class="bg-black text-white text-center text-sm py-4 mt-10">
-            © 2026, Damir Bubanović
-        </footer>
-
     </div>
+
+    <footer class="w-full bg-black text-white text-center text-sm py-4 mt-10">
+        © 2026, Damir Bubanović
+    </footer>
 </body>
 </html>
