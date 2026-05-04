@@ -30,6 +30,7 @@
                                         <th class="py-3 pr-4">Est.</th>
                                         <th class="py-3 pr-4">Actual</th>
                                         <th class="py-3 pr-4">Cost</th>
+                                        <th class="py-3 pr-4">Actions</th>
                                     </tr>
                                 </thead>
 
@@ -76,6 +77,13 @@
 
                                             <td class="py-3 pr-4 text-gray-600">
                                                 {{ $task->agreed_cost !== null ? number_format($task->agreed_cost, 2) . ' €' : '—' }}
+                                            </td>
+
+                                            <td class="py-3 pr-4">
+                                                <a href="{{ route('projects.tasks.show', [$task->project, $task]) }}"
+                                                   class="text-sm font-bold text-gray-950 hover:underline">
+                                                    View
+                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach

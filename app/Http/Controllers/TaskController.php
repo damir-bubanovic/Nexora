@@ -25,6 +25,15 @@ class TaskController extends Controller
         return view('tasks.index', compact('project', 'tasks'));
     }
 
+
+    public function show(Project $project, Task $task)
+    {
+        $this->authorizeProjectAccess($project);
+
+        return view('tasks.show', compact('project', 'task'));
+    }
+
+
     public function create(Project $project): View
     {
         $this->authorizeProjectAccess($project);

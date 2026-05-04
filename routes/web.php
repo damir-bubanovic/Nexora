@@ -34,6 +34,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/my-tasks', [TaskController::class, 'myTasks'])->name('tasks.my');
 
     Route::get('/projects/{project}/tasks', [TaskController::class, 'index'])->name('projects.tasks.index');
+    Route::get('/projects/{project}/tasks/{task}', [TaskController::class, 'show'])
+    ->name('projects.tasks.show');
     Route::get('/projects/{project}/tasks/create', [TaskController::class, 'create'])->name('projects.tasks.create');
     Route::post('/projects/{project}/tasks', [TaskController::class, 'store'])->name('projects.tasks.store');
     Route::get('/projects/{project}/tasks/{task}/edit', [TaskController::class, 'edit'])->name('projects.tasks.edit');
